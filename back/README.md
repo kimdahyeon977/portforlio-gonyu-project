@@ -73,4 +73,4 @@ yarn start
   - 학습 편의를 위해 일괄 http 400 코드로 에러를 변환하는 에러핸들러인 errorMiddleware.js
 
 ## 참고해야하는 API 문서
-- https://documenter.getpostman.com/view/19463141/UVsJwSZr#671cc36e-34a9-4b72-b56d-15e526f22e75   
+- https://documenter.getpostman.com/view/19463141/UVsJwSZr#671cc36e-34a9-4b72-b56d-15e526f22e75
