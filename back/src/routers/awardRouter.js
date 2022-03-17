@@ -46,7 +46,7 @@ Awardrouter.get("/awardlist/:user_id", async function (req, res, next) {
 Awardrouter.put("/awards/:id", async function (req, res, next) {
   try {
     // URI로부터 수상 데이터 id를 추출함.
-    const awardId = req.params.id;
+    const award_Id = req.params.id;
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
@@ -55,7 +55,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {
     const toUpdate = { title, description };
 
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-    const award = await AwardService.setAward({ awardId, toUpdate });
+    const award = await AwardService.setAward({ award_Id, toUpdate });
 
     if (award.errorMessage) {
       throw new Error(award.errorMessage);
@@ -66,6 +66,22 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {
     next(error);
   }
 });
+
+Awardrouter.get("/awards/:id", async function (req, res, next) {
+    try {
+      const award_Id = req.params.id;
+      const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
+
+      if (currentUserInfo.errorMessage) {
+        throw new Error(currentUserInfo.errorMessage);
+      }
+
+      res.status(200).send(currentUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 
 

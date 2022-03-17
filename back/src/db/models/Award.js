@@ -6,8 +6,8 @@ class Award {
     return createdNewAward;
   }
 
-  static async findById({ awardId }) {
-    const award = await AwardModel.findOne({ id: awardId });
+  static async findById({ award_Id }) {
+    const award = await AwardModel.findOne({ id: award_Id });
     return award;
   }
 
@@ -16,8 +16,8 @@ class Award {
     return awards;
   }
 
-  static async update({ awardId, fieldToUpdate, newValue }) {
-    const filter = { id: awardId };
+  static async update({ award_Id, fieldToUpdate, newValue }) {
+    const filter = { id: award_Id };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
@@ -29,8 +29,8 @@ class Award {
     return updatedAward;
   }
 
-  static async deleteById({ awardId }) {
-    const deleteAward = await AwardModel.deleteOne({ _id: awardId });
+  static async deleteById({ award_Id }) {
+    const deleteAward = await AwardModel.deleteOne({ _id: award_Id });
     const awardDeleted = deleteAward.deletedCount === 1;
     return awardDeleted;
   }

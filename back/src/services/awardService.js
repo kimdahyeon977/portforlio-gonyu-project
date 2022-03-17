@@ -22,9 +22,9 @@ class AwardService {
 
 
 
-  static async setAward({ awardId, toUpdate }) {
+  static async setAward({ award_Id, toUpdate }) {
     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
-    let award = await Award.findById({ awardId });
+    let award = await Award.findById({ award_Id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
@@ -37,14 +37,27 @@ class AwardService {
     if (toUpdate.title) {
       const fieldToUpdate = "title";
       const newValue = toUpdate.title;
-      award = await Award.update({ awardId, fieldToUpdate, newValue });
+      award = await Award.update({ award_Id, fieldToUpdate, newValue });
     }
 
 
     if (toUpdate.description) {
       const fieldToUpdate = "description";
       const newValue = toUpdate.description;
-      award = await Award.update({ awardId, fieldToUpdate, newValue });
+      award = await Award.update({ award_Id, fieldToUpdate, newValue });
+    }
+
+    return award;
+  }
+
+  static async getAwardInfo({ user_id }) {
+    const award = await Award.findById({ user_id });
+
+    // db에서 찾지 못한 경우, 에러 메시지 반환
+    if (!award) {
+      const errorMessage =
+        "해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.";
+      return { errorMessage };
     }
 
     return award;
