@@ -1,13 +1,11 @@
 import is from "@sindresorhus/is"; //어떤 모듈인지
-import { Router as expressRouter} from "express";
-import { projectService } from "../services/projectService";
-import { login_required } from '../middlewares/login_required';
-const router= expressRouter();
-const projectRouter = expressRouter();
-router.use(login_required);//라우터를 전역으로 쓰고 싶다면
-//아래에 있는 것들은 이 부분을 거쳐야한다.
+import { Router } from "express";
+import { projectservice as projectService } from "../services/projectService";
+import { login_required } from "../middlewares/login_required";
+const projectRouter = Router();
+projectRouter.use(login_required)
 
-projectRouter.post("/project/register", async function (req, res, next) { //추가
+projectRouter.post("/register", async function (req, res, next) { //추가
   //미들웨어 구현해야함 내 포트폴리오에만 추가버튼 있게
   try {
     if (is.emptyObject(req.body)) {
@@ -37,7 +35,7 @@ projectRouter.post("/project/register", async function (req, res, next) { //추�
     next(error);
   }
 });
-projectRouter.get('/project/:projectId',async(req,res,next)=>{ //projectId로 조회
+projectRouter.get('/:projectId',async(req,res,next)=>{ //projectId로 조회
   try{
       const {projectId} = req.params
       const project=await projectService.find({projectId})
@@ -50,7 +48,7 @@ projectRouter.get('/project/:projectId',async(req,res,next)=>{ //projectId로 �
   }
 })
 
-projectRouter.get('/project/:userId',async(req,res,next)=>{ //userId로 조회
+projectRouter.get('/:userId',async(req,res,next)=>{ //userId로 조회
   try{
     const {userId} = req.params
       const projects=await projectService.findList({userId})
@@ -64,7 +62,7 @@ projectRouter.get('/project/:userId',async(req,res,next)=>{ //userId로 조회
 })
 
 projectRouter.put( //수정
-  "/project/:projectId", //미들웨어 구현해야함 내 포트폴리오에만 수정버튼 있게
+  "/:projectId", //미들웨어 구현해야함 내 포트폴리오에만 수정버튼 있게
   async function (req, res, next) {
     try {
       const {projectId} = req.params
@@ -89,7 +87,7 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/project/:projectId", //미들웨어 구현해야함 내 포트폴리오에만 삭제버튼 있게
+projectRouter.delete("/:projectId", //미들웨어 구현해야함 내 포트폴리오에만 삭제버튼 있게
 async (req, res, next) => {
   try{
     const {projectId} = req.params
