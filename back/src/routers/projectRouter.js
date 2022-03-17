@@ -49,21 +49,20 @@ projectRouter.get('/project/:projectId',async(req,res,next)=>{ //projectId로 �
     next(err)
   }
 })
-/*
-projectRouter.get('/project/:user_id',async(req,res,next)=>{ //userId로 조회
+
+projectRouter.get('/project/:userId',async(req,res,next)=>{ //userId로 조회
   try{
-      const user_id = req.params.userId
-      const projects=await projectService.find({userId})
+    const {userId} = req.params
+      const projects=await projectService.findList({userId})
       res.status(200).send(projects)
       if(projects.errorMessage){
-            throw new Error(projects.errorMessage)
-        }
-
+            throw new Error(projects.errorMessage)}
+      res.status(200).send(projects)
   }catch(err){
     next(err)
   }
 })
-*/
+
 projectRouter.put( //수정
   "/project/:projectId", //미들웨어 구현해야함 내 포트폴리오에만 수정버튼 있게
   async function (req, res, next) {

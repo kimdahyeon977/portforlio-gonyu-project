@@ -11,14 +11,25 @@ class projectService {
   }
   static async find({projectId}){ //projectId로 특정 project만 조회
     const project = await Project.findById({projectId});
+    // db에서 찾지 못한 경우, 에러 메시지 반환
+    if (!project) {
+      const errorMessage =
+        "해당 프로젝트가 없습니다. 다시 한 번 확인해 주세요.";
+      return { errorMessage };
+    }
     return project;
   }
-  /*
-  static async find({id}){ //userId로 모두 조회
-    const projects = await Project.findAll({id});
+  
+  static async findList({userId}){ //userId로 모두 조회
+    const projects = await Project.findAll({userId});
+    if (!projects) {
+      const errorMessage =
+        "작성자만 접근할 수 있습니다.";
+      return { errorMessage };
+    }
     return projects;
   }
-  */
+  
 
   static async set({ projectId, toUpdate }) {//수정 
     // 우선 해당 projectid 의 플젝이 db에 존재하는지 여부 확인
