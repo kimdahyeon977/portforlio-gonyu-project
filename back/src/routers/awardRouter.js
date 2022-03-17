@@ -43,6 +43,30 @@ Awardrouter.get("/awardlist/:user_id", async function (req, res, next) {
   }
 });
 
+Awardrouter.put("/awards/:id", async function (req, res, next) {
+  try {
+    // URI로부터 수상 데이터 id를 추출함.
+    const awardId = req.params.id;
+
+    // body data 로부터 업데이트할 수상 정보를 추출함.
+    const title = req.body.title ?? null;
+    const description = req.body.description ?? null;
+
+    const toUpdate = { title, description };
+
+    // 위 추출된 정보를 이용하여 db의 데이터 수정하기
+    const award = await AwardService.setAward({ awardId, toUpdate });
+
+    if (award.errorMessage) {
+      throw new Error(award.errorMessage);
+    }
+
+    res.status(200).send(award);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 
 

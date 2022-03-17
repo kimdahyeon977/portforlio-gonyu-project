@@ -30,9 +30,9 @@ class Award {
   }
 
   static async deleteById({ awardId }) {
-    const deleteResult = await AwardModel.deleteOne({ id: awardId });
-    const isDataDeleted = deleteResult.deletedCount === 1;
-    return isDataDeleted;
+    const deleteAward = await AwardModel.deleteOne({ _id: awardId });
+    const awardDeleted = deleteAward.deletedCount === 1;
+    return awardDeleted;
   }
 }
 export { Award };
