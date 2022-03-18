@@ -50,18 +50,34 @@ class AwardService {
     return award;
   }
 
-  static async getAwardInfo({ user_id }) {
-    const award = await Award.findById({ user_id });
+  static async getAwardInfo({ award_Id }) {
+    const award = await Award.findById({ award_Id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
       const errorMessage =
-        "해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요.";
+        "해당 수상 내역 X";
       return { errorMessage };
     }
 
     return award;
   }
-  }
 
+
+  static async deleteAward({ award_Id }) {//삭제
+
+    let projectTodelete = await Award.findById({ award_Id });
+
+    // db에서 찾지 못한 경우, 에러 메시지 반환
+    if (!projectTodelete) {
+      const errorMessage =
+        "삭제할 프로젝트가 없습니다. 다시 한 번 확인해 주세요.";
+      return { errorMessage };
+    }
+
+    const awardDelete = await Award.deleteByid({ award_Id });
+    return awardDelete
+  }
+  
+}
 export {AwardService}

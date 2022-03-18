@@ -29,10 +29,9 @@ class Award {
     return updatedAward;
   }
 
-  static async deleteById({ award_Id }) {
-    const deleteAward = await AwardModel.deleteOne({ _id: award_Id });
-    const awardDeleted = deleteAward.deletedCount === 1;
-    return awardDeleted;
+  static async deleteByid({ award_Id }) {
+    const deleteAward = await AwardModel.deleteOne({ id: award_Id });
+    return deleteAward;
   }
 }
 export { Award };

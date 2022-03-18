@@ -3,7 +3,7 @@ import { Router } from "express";
 import { AwardService } from "../services/awardService";
 const Awardrouter = Router();
 
-Awardrouter.post("/award/create", async function (req, res, next) {
+Awardrouter.post("/award/create", async function (req, res, next) {  // 작동 됨
   try {
     if (is.emptyObject(req.body)) {
       throw new Error(
@@ -33,7 +33,7 @@ Awardrouter.post("/award/create", async function (req, res, next) {
   }
 });
 
-Awardrouter.get("/awardlist/:user_id", async function (req, res, next) {
+Awardrouter.get("/awardlist/:user_id", async function (req, res, next) { // 작동됨
   try {
     const user_id = req.params.user_id;
     const awardList = await AwardService.getAwardList({ user_id });
@@ -43,7 +43,7 @@ Awardrouter.get("/awardlist/:user_id", async function (req, res, next) {
   }
 });
 
-Awardrouter.put("/awards/:id", async function (req, res, next) {
+Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
   try {
     // URI로부터 수상 데이터 id를 추출함.
     const award_Id = req.params.id;
@@ -67,7 +67,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {
   }
 });
 
-Awardrouter.get("/awards/:id", async function (req, res, next) {
+Awardrouter.get("/awards/:id", async function (req, res, next) {  // 작동 
     try {
       const award_Id = req.params.id;
       const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
@@ -83,6 +83,22 @@ Awardrouter.get("/awards/:id", async function (req, res, next) {
   }
 );
 
+Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 확인
+  try {
+    const award_Id = req.params.id
+
+    // 위 id를 이용하여 db에서 데이터 삭제하기
+    const result = await AwardService.deleteAward({ award_Id });
+
+    if (result.errorMessage) {
+      throw new Error(result.errorMessage);
+    }
+
+    res.status(200).send('삭제완료');
+  } catch (error) {
+    next(error);
+  }
+});
 
 
 
