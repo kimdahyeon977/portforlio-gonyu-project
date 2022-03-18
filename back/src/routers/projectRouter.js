@@ -4,9 +4,10 @@ import { projectservice as projectService } from "../services/projectService";
 import { login_required } from "../middlewares/login_required";
 import { checkPermission } from "../middlewares/checkpermission";
 const projectRouter = Router();
-//projectRouter.use(login_required)
+projectRouter.use(login_required)
 
-projectRouter.post("/register", async function (req, res, next) { //추가
+projectRouter.post("/register",//checkPermission, 
+async function (req, res, next) { //추가
   try {
     if (is.emptyObject(req.body)) {
       throw new Error(
@@ -35,7 +36,9 @@ projectRouter.post("/register", async function (req, res, next) { //추가
     next(error);
   }
 });
-projectRouter.get('/:projectId',checkPermission, async(req,res,next)=>{ //projectId로 조회
+projectRouter.get('/:projectId',
+//checkPermission, 
+async(req,res,next)=>{ //projectId로 조회
   try{
       const {projectId} = req.params
       const project=await projectService.find({projectId})
@@ -62,7 +65,7 @@ projectRouter.get('/:userId',async(req,res,next)=>{ //userId로 조회
 })
 
 projectRouter.put( //수정
-  "/:projectId", checkPermission,
+  "/:projectId", //checkPermission,
   async function (req, res, next) {
     try {
       const {projectId} = req.params
@@ -87,7 +90,7 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/:projectId", checkPermission,
+projectRouter.delete("/:projectId", //checkPermission,
 async (req, res, next) => {
   try{
     const {projectId} = req.params
