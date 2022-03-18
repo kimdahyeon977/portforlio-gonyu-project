@@ -5,7 +5,7 @@ import { login_required } from "../middlewares/login_required";
 import { checkPermission } from "../middlewares/checkpermission";
 const projectRouter = Router();
 projectRouter.use(login_required)
-
+//projectRouter.use(checkPermission)
 projectRouter.post("/register",//checkPermission, 
 async function (req, res, next) { //추가
   try {
@@ -30,7 +30,7 @@ async function (req, res, next) { //추가
     if (newProject.errorMessage) {
       throw new Error(newProject.errorMessage);
     }
-
+    console.log(req.body)
     res.status(201).json(newProject);
   } catch (error) {
     next(error);

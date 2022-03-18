@@ -1,10 +1,9 @@
-import { Schema, model, Mongoose, Types } from "mongoose";
-
+import { Schema, model } from "mongoose";
 const projectId=require('./types/projectId.js')//projectId가 자동으로 생성되서 사용할 수 있다.
-const projectSchema = new Schema(
+const projectSchema = Schema(
   {
     projectId, //프로젝트 고유아이디
-    user_id:{type: Schema.Types.ObjectId, ref:'User', required:true}, //user_id는 로그인 할때 생성한 유저의 고윳값( _id ) 
+    //user_id,
     title: { //프로젝트 이름
       type: String,
       required: true,
