@@ -66,12 +66,12 @@ class AwardService {
 
   static async deleteAward({ award_Id }) {//삭제
 
-    let projectTodelete = await Award.findById({ award_Id });
+    let awardDel = await Award.findById({ award_Id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!projectTodelete) {
+    if (!awardDel) {
       const errorMessage =
-        "삭제할 프로젝트가 없습니다. 다시 한 번 확인해 주세요.";
+        "해당 수상내역 X";
       return { errorMessage };
     }
 
