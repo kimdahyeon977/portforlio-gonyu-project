@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
 import { User } from "./models/User";
-<<<<<<< HEAD
 import { Certificate } from "./models/Certificate";
-import { Award } from  "./models/Award";
-=======
+import { Award } from "./models/Award";
 import { Education } from "./models/Education";
->>>>>>> EducationMVP_BE
 
 const DB_URL =
   process.env.MONGODB_URL ||
@@ -22,9 +19,6 @@ db.on("error", (error) =>
 );
 
 export { User };
-<<<<<<< HEAD
 export { Certificate };
-export {Award};
-=======
+export { Award };
 export { Education };
->>>>>>> EducationMVP_BE
