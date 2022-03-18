@@ -3,7 +3,6 @@ import express from "express";
 import { userAuthRouter } from "./routers/userRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { projectRouter } from "./routers/projectRouter";
-import { login_required } from './middlewares/login_required';
 const app = express();
 
 // CORS 에러 방지
