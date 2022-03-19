@@ -20,7 +20,9 @@ function login_required(req, res, next) {
     const jwtDecoded = jwt.verify(userToken, process.env.JWT_SECRET_KEY);
     const user_id = jwtDecoded.user_id;
     req.currentUserId = user_id;
-    console.log(req.currentUserId)
+    let currentUserId = user_id
+    global.user_id = currentUserId
+    //console.log(req.currentUserId)
     next();
   } catch (error) {
     res.status(400).send("정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.");
