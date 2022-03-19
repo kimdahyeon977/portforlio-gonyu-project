@@ -1,22 +1,21 @@
 import { ProjectModel } from "../schemas/project";
-
 class Project {
   async create({ newProject }) {//추가
     const createdNewProject = await ProjectModel.create(newProject);
     return createdNewProject;
   }
   async findById({ projectId }) { //projectId로 플젝 찾기
-    const project = await ProjectModel.findOne({ projectId: projectId });
+    const project = await ProjectModel.findOne({ id: projectId });
     return project;
   }
   
-  async findAll({userId}) {//userId의 플젝 모두 보기 
-    const projects = await ProjectModel.find({userId: userId});
+  async findByUserId({ user_id }) {
+    const projects = await ProjectModel.findOne({ id: user_id });
     return projects;
   }
   
-  async update({ projectId, fieldToUpdate, newValue }) { //수정
-    const filter = { projectId: projectId }; 
+  async update({ id, fieldToUpdate, newValue }) { //수정
+    const filter = { id: id }; 
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
@@ -27,8 +26,8 @@ class Project {
     );
     return updatedProject;
   }
-  async deleteById({projectId}){ //삭제
-    const deletedProject= await ProjectModel.deleteOne({projectId: projectId})
+  async deleteById({id}){ //삭제
+    const deletedProject= await ProjectModel.deleteOne({id: id})
     return deletedProject
   }
 }

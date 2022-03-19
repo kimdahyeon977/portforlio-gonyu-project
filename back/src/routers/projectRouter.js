@@ -2,32 +2,10 @@ import is from "@sindresorhus/is"; //어떤 모듈인지
 import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
 import { login_required } from "../middlewares/login_required";
-import { userRouter } from "./userRouter";
 const projectRouter = Router();
 projectRouter.use(login_required)
-//projectRouter.use(userRouter)
-projectRouter.post("/create",  async function (req, res, next) {
-  console.log(userId);
-  //console.log(user_id);
-  /*
-  try {
-    // project요청시 jwt토큰에서 해독한 요청한 사용자의 아이디 : user_id
-    const user_id : 
 
-    // 위 데이터를 이용하여 유저 db에서 유저 찾기
-    const user = await userAuthService.getUser({ email, password });
-
-    if (user.errorMessage) {
-      throw new Error(user.errorMessage);
-    }
-    console.log(user.id)
-    res.status(200).send(user);
-  } catch (error) {
-    next(error);
-  }
-  */
- next();
-},
+projectRouter.post("/project/create",
 async function (req, res, next) { //추가
   try {
     if (is.emptyObject(req.body)) {
@@ -38,12 +16,14 @@ async function (req, res, next) { //추가
 
     // req (request) 에서 데이터 가져오기
     const title = req.body.title;
+    const user_id = req.body.user_id;
     const task = req.body.task;
     const date = req.body.date;
 
     // 위 데이터를 유저 db에 추가하기
     const newProject = await projectService.add({
       title,
+      user_id,
       task,
       date,
     });
@@ -56,7 +36,7 @@ async function (req, res, next) { //추가
     next(error);
   }
 });
-projectRouter.get('/:id',
+projectRouter.get('/project/:id',
 async(req,res,next)=>{ //projectId로 조회
   try{
       const {id} = req.params
@@ -70,21 +50,35 @@ async(req,res,next)=>{ //projectId로 조회
   }
 })
 
-projectRouter.get('/:user_id',async(req,res,next)=>{ //userId로 조회
-  try{
-    const {user_id} = req.params
-      const projects=await projectService.findList({user_id})
-      res.status(200).send(projects)
-      if(projects.errorMessage){
-            throw new Error(projects.errorMessage)}
-      res.status(200).send(projects)
-  }catch(err){
-    next(err)
+
+projectRouter.get(
+  "/projectlist/:id",
+  async function (req, res, next) {
+    try {
+      const user_id = req.params.id;
+      const currentUserInfo = await projectService.getUserInfo({ user_id });
+
+      if (currentUserInfo.errorMessage) {
+        throw new Error(currentUserInfo.errorMessage);
+      }
+      /*
+      if (){//다른사람페이지에서 수정,추가,삭제하려고 할때 프론트에서 요청정보 받아옴
+          try{
+          if(req.currentId !== user_id) throw new Error('접근권한이 없습니다.');
+        }catch(error){
+          next(error)
+        }
+      }
+      */
+      res.status(200).send(currentUserInfo);
+    } catch (error) {
+      next(error);
+    }
   }
-})
+);
 
 projectRouter.put( //수정
-  "/:id",
+  "/project/:id",
   async function (req, res, next) {
     try {
       const {id} = req.params
@@ -109,7 +103,7 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/:id", 
+projectRouter.delete("/project/:id", 
 async (req, res, next) => {
   try{
     const {id} = req.params
