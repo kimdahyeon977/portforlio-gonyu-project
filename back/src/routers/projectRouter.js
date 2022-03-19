@@ -2,11 +2,12 @@ import is from "@sindresorhus/is"; //어떤 모듈인지
 import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
 import { login_required } from "../middlewares/login_required";
+import { userRouter } from "./userRouter";
 const projectRouter = Router();
 projectRouter.use(login_required)
-//projectRouter.use(checkPermission)
 projectRouter.post("/register",  async function (req, res, next) {
-  console.log(userId)
+  console.log(user_id);
+  //console.log(userId);
   /*
   try {
     // project요청시 jwt토큰에서 해독한 요청한 사용자의 아이디 : user_id
@@ -24,6 +25,7 @@ projectRouter.post("/register",  async function (req, res, next) {
     next(error);
   }
   */
+ next();
 },
 async function (req, res, next) { //추가
   try {

@@ -47,9 +47,9 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
     if (user.errorMessage) {
       throw new Error(user.errorMessage);
     }
-    let userId = user.id
-    global userId = userId
-    //console.log(user.id)
+    let userId = user.id;
+    global.userId = userId;
+    //console.log(user.Id)
     res.status(200).send(user);
   } catch (error) {
     next(error);

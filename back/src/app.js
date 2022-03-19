@@ -3,10 +3,8 @@ import express from "express";
 import { userAuthRouter } from "./routers/userRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { projectRouter } from "./routers/projectRouter";
-const app = express();
+const app = express();// CORS 에러 방지
 
-// CORS 에러 방지
-app.use(cors());
 
 // express 기본 제공 middleware
 // express.json(): POST 등의 요청과 함께 오는 json형태의 데이터를 인식하고 핸들링할 수 있게 함.
