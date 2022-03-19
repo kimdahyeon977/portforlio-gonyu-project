@@ -5,9 +5,10 @@ import { login_required } from "../middlewares/login_required";
 import { userRouter } from "./userRouter";
 const projectRouter = Router();
 projectRouter.use(login_required)
-projectRouter.post("/register",  async function (req, res, next) {
-  console.log(user_id);
-  //console.log(userId);
+//projectRouter.use(userRouter)
+projectRouter.post("/create",  async function (req, res, next) {
+  console.log(userId);
+  //console.log(user_id);
   /*
   try {
     // project요청시 jwt토큰에서 해독한 요청한 사용자의 아이디 : user_id
@@ -55,12 +56,11 @@ async function (req, res, next) { //추가
     next(error);
   }
 });
-projectRouter.get('/:projectId',
-//checkPermission, 
+projectRouter.get('/:id',
 async(req,res,next)=>{ //projectId로 조회
   try{
-      const {projectId} = req.params
-      const project=await projectService.find({projectId})
+      const {id} = req.params
+      const project=await projectService.find({id})
       if(project.errorMessage){
         throw new Error(project.errorMessage)
     }
@@ -70,10 +70,10 @@ async(req,res,next)=>{ //projectId로 조회
   }
 })
 
-projectRouter.get('/:userId',async(req,res,next)=>{ //userId로 조회
+projectRouter.get('/:user_id',async(req,res,next)=>{ //userId로 조회
   try{
-    const {userId} = req.params
-      const projects=await projectService.findList({userId})
+    const {user_id} = req.params
+      const projects=await projectService.findList({user_id})
       res.status(200).send(projects)
       if(projects.errorMessage){
             throw new Error(projects.errorMessage)}
@@ -84,19 +84,19 @@ projectRouter.get('/:userId',async(req,res,next)=>{ //userId로 조회
 })
 
 projectRouter.put( //수정
-  "/:projectId", //checkPermission,
+  "/:id",
   async function (req, res, next) {
     try {
-      const {projectId} = req.params
-      // body data 로부터 업데이트할 사용자 정보를 추출함.
+      const {id} = req.params
+      // body data 로부터 업데이트할 플젝 정보를 추출함.
       const title = req.body.title ?? null;
       const task = req.body.task ?? null;
       const date = req.body.date ?? null;
 
       const toUpdate = { title, task, date };
 
-      // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
-      const updatedProject = await projectService.set({ projectId, toUpdate });
+      // 고유 플젝로 플젝정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
+      const updatedProject = await projectService.set({ id, toUpdate });
 
       if (updatedProject.errorMessage) {
         throw new Error(updatedProject.errorMessage);
@@ -109,11 +109,11 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/:projectId", //checkPermission,
+projectRouter.delete("/:id", 
 async (req, res, next) => {
   try{
-    const {projectId} = req.params
-    const deletedProject= await projectService.delete({ projectId });
+    const {id} = req.params
+    const deletedProject= await projectService.delete({ id });
     if (deletedProject.errorMessage) {
       throw new Error(deletedProject.errorMessage);
     }
