@@ -6,7 +6,7 @@ function EducationCard({ education, isEditable, setIsEditing }){
     <ListGroup variant="flush">
     <ListGroup.Item>{education.school}</ListGroup.Item>
     <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-    <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+    <ListGroup.Item>Vestibulum  eros</ListGroup.Item>
   </ListGroup>
 </Card>
   )
