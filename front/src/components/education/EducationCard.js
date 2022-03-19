@@ -5,7 +5,7 @@ function EducationCard({ education, isEditable, setIsEditing }){
     <Card style={{ width: '30rem' }}>
     <ListGroup variant="flush">
     <ListGroup.Item>{education.school}</ListGroup.Item>
-    <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+    <ListGroup.Item>ddd</ListGroup.Item>
     <ListGroup.Item>Vestibulum  eros</ListGroup.Item>
   </ListGroup>
 </Card>
