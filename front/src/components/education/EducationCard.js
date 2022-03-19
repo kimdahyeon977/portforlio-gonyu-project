@@ -2,7 +2,7 @@ import { Card, ListGroup } from "react-bootstrap";
 
 function EducationCard({ education, isEditable, setIsEditing }){
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: '30rem' }}>
     <ListGroup variant="flush">
     <ListGroup.Item>{education.school}</ListGroup.Item>
     <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
