@@ -15,7 +15,7 @@ const CertificateSchema = new Schema(
       required: true,
     },
     when_date: {
-      type: Date,
+      type: String,
       required: true,
     },
     description: {
