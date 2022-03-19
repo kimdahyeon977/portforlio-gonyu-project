@@ -16,7 +16,7 @@ async function (req, res, next) { //추가
 
     // req (request) 에서 데이터 가져오기
     const title = req.body.title;
-    const user_id = req.body.user_id;
+    const user_id = req.currentUserId;
     const task = req.body.task;
     const date = req.body.date;
 
@@ -82,6 +82,10 @@ projectRouter.put( //수정
   async function (req, res, next) {
     try {
       const {id} = req.params
+      const projectCheck = await projectService.getProject({ project_id });
+        if(projectCheck.userId !== req.currentUserId){
+           throw new Error("접근권한이 없습니다.");
+        }
       // body data 로부터 업데이트할 플젝 정보를 추출함.
       const title = req.body.title ?? null;
       const task = req.body.task ?? null;
