@@ -54,33 +54,46 @@ certificateRouter.get("/certificates/:id", async function (req, res, next) {
   }
 });
 
-certificateRouter.put("/certificates/:id", async function (req, res, next) {
-  try {
-    // URI로부터 수상 데이터 id를 추출함.
-    const certificateId = req.params.id;
+certificateRouter.put(
+  "/certificates/:id",
+  login_required,
+  async function (req, res, next) {
+    try {
+      // URI로부터 수상 데이터 id를 추출함.
+      const certificateId = req.params.id;
+      const certificate = await CertificateService.getCertificate({
+        certificateId,
+      });
 
-    // body data 로부터 업데이트할 수상 정보를 추출함.
-    const title = req.body.title ?? null;
-    const description = req.body.description ?? null;
-    const when_date = req.body.when_date ?? null;
+      // body data 로부터 업데이트할 수상 정보를 추출함.
+      const title = req.body.title ?? null;
+      const description = req.body.description ?? null;
+      const when_date = req.body.when_date ?? null;
 
-    const toUpdate = { title, description, when_date };
+      const toUpdate = { title, description, when_date };
 
-    // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-    const certificate = await CertificateService.setCertificate({
-      certificateId,
-      toUpdate,
-    });
+      if (certificate.user_id !== req.currentUserId) {
+        res.status(400).send("자격증을 수정할 권한이 없습니다.");
+      }
 
-    if (certificate.errorMessage) {
-      throw new Error(certificate.errorMessage);
+      // 위 추출된 정보를 이용하여 db의 데이터 수정하기
+      if (certificate.user_id !== req.currentUserId) {
+        const changedCertificate = await CertificateService.setCertificate({
+          certificateId,
+          toUpdate,
+        });
+
+        if (changedCertificate.errorMessage) {
+          throw new Error(changedCertificate.errorMessage);
+        }
+
+        res.status(200).send(changedCertificate);
+      }
+    } catch (error) {
+      next(error);
     }
-
-    res.status(200).send(certificate);
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 certificateRouter.delete("/certificates/:id", async function (req, res, next) {
   try {
