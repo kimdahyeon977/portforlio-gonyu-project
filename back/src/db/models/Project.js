@@ -4,16 +4,11 @@ class Project {
     const createdNewProject = await ProjectModel.create(newProject);
     return createdNewProject;
   }
-  async findById({ projectId }) { //projectId로 플젝 찾기
-    const project = await ProjectModel.findOne({ id: projectId });
+  async findById({ id }) {//해당 플젝 찾기
+    const project = await ProjectModel.findOne({ id: id });
     return project;
   }
-  
-  async findByUserId({ user_id }) {
-    const projects = await ProjectModel.findOne({ id: user_id });
-    return projects;
-  }
-  
+
   async update({ id, fieldToUpdate, newValue }) { //수정
     const filter = { id: id }; 
     const update = { [fieldToUpdate]: newValue };
@@ -25,6 +20,13 @@ class Project {
       option
     );
     return updatedProject;
+  }
+
+
+  
+  async findByUserId({ user_id }) { //해당 유저찾기
+    const projects = await ProjectModel.find({ user_id: user_id });
+    return projects;
   }
   async deleteById({id}){ //삭제
     const deletedProject= await ProjectModel.deleteOne({id: id})
