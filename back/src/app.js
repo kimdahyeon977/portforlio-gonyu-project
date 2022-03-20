@@ -6,9 +6,7 @@ import { educationRouter } from "./routers/educationRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { Awardrouter } from "./routers/awardRouter";
 import { login_required } from "./middlewares/login_required";
-
 import { projectRouter } from "./routers/projectRouter";
-import { login_required } from "./middlewares/login_required";
 const app = express();// CORS 에러 방지
 
 
@@ -27,7 +25,7 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(certificateRouter);
 app.use(educationRouter);
-app.use("/project", projectRouter);
+app.use(projectRouter);
 app.use(login_required,Awardrouter)
 app.use(projectRouter);
 
