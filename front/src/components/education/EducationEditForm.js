@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import * as Api from "../../api";
 import { Button, Form, Col, Row } from "react-bootstrap";
 
-function EducationEditForm({ eudcationLevel, setIsEditing, setEducationList }) {
-  const [school, setSchool] = useState(eudcationLevel.school);
-  const [major, setMajor] = useState(eudcationLevel.major);
-  const [position, setPosition] = useState(eudcationLevel.position);
+function EducationEditForm({ educationLevel, setIsEditing, setEducationList }) {
+  const [school, setSchool] = useState(educationLevel.school);
+  const [major, setMajor] = useState(educationLevel.major);
+  const [position, setPosition] = useState(educationLevel.position);
 
   const handleSubmit= async (e) => {
     e.preventDefault();
 
-    const user_id = eudcationLevel.user_id;
+    const user_id = educationLevel.user_id;
 
     // 학력 수정
     try {
-      await Api.put(`educations/${eudcationLevel.id}`, {
+      await Api.put(`educations/${educationLevel.id}`, {
         user_id,
         school,
         major,
@@ -101,7 +101,7 @@ function EducationEditForm({ eudcationLevel, setIsEditing, setEducationList }) {
       <Button variant="primary" type="submit" className="me-3">
         확인
       </Button>
-      <Button variant="secondary" type="submit" onClick={() => setIsEditing(false)}>
+      <Button variant="secondary" onClick={() => setIsEditing(false)}>
         취소
       </Button>
     </Col>

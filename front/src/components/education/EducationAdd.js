@@ -11,7 +11,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
-
+    console.log(e.target.value);
     const user_id = portfolioOwnerId;
 
     try {
@@ -26,7 +26,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
     }
 
     try {
-      const res = await Api.get("education", user_id);
+      const res = await Api.get("educationlist", user_id);
       setEducationList(res.data);
       setIsAdding(false);
     } catch (err) {
@@ -102,7 +102,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
       <Button variant="primary" type="submit" className="me-3">
         확인
       </Button>
-      <Button variant="secondary" type="submit" onClick={() => setIsAdding(false)}>
+      <Button variant="secondary" onClick={() => setIsAdding(false)}>
         취소
       </Button>
     </Col>
