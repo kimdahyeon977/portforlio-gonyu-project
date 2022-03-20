@@ -102,7 +102,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
       <Button variant="primary" type="submit" className="me-3">
         확인
       </Button>
-      <Button variant="secondary" type="submit">
+      <Button variant="secondary" type="submit" onClick={() => setIsAdding(false)}>
         취소
       </Button>
     </Col>
