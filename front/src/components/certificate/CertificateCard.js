@@ -5,11 +5,11 @@ function CertificateCard({ certificate, isEditable, setIsEditing }){
     <Card>
       <Row className="align-items-center">
         <Col>
-          <span>{certificate.school}</span>
+          <span>{certificate.title}</span>
           <br />
-          <span className="text-muted">{`${certificate.major} (${
-            certificate.position || ""
-          })`}</span>
+          <span className="text-muted">{certificate.description}</span>
+          <br />
+          <span className="text-muted">{certificate.when_date}</span>
         </Col>
         {isEditable && (
           <Col lg="1">
