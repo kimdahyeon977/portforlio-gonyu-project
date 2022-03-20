@@ -6,6 +6,7 @@ import { UserStateContext } from "../App";
 import * as Api from "../api";
 import User from "./user/User";
 import Award from "./award/Award"
+import Awards from "./award/Awards";
 
 function Portfolio() {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ function Portfolio() {
         <Col>
 
           <div style={{ textAlign: "center" }}>
-            <Award></Award>
+            <Awards/>
           </div>
 
         </Col>

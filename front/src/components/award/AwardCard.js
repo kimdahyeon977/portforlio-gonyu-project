@@ -1,26 +1,26 @@
-import React from "react";
-import {Card, Row} from "react-bootstrap"
+import {Button, Card, Col, Row} from "react-bootstrap"
 
-function AwardCard(){
-    return <Card className="mb-2 ms-3 mr-5" xs={1} sm={2}>
-        <Card.Body>
-            <Card.Title>
-                <Row className="justify-content-md-left">
-                    수상이력
-                </Row>
-            </Card.Title>
-            <Card.Subtitle>
-                <Row>
-                    subtitle?
-                </Row>
-            </Card.Subtitle>
-            <Card.Text>
-                <Row style={{color: "grey"}}>
-                    Text
-                </Row>
-            </Card.Text>
-        </Card.Body>
-    </Card>
+function AwardCard({award, isEditable, setIsEditing}){
+    return <Card.Text>
+        <Row>
+            <Col>
+                <div>{award.title}</div>
+                <div>{award.description}</div>
+            </Col>
+            {
+                isEditable && (
+                    <Col>
+                        <Button
+                            varient="outline-info"
+                            onClick={()=>{setIsEditing(true)}}
+                        >
+                            Edit
+                        </Button>
+                    </Col>
+                )
+            }
+        </Row>
+    </Card.Text>
 }
 
 export default AwardCard;

@@ -6,16 +6,16 @@ function Award({award, setAwards, isEditable}){
     const [isEditing, setIsEditing] = useState(false);
     return <>
         {isEditing ? (
-            <AwardEditForm
-                setAward = {isEditing}
-                curAward = {award}
-                setIsEditing = {setIsEditing}
+            <AwardEditForm 
+                setAwards={setAwards}
+                currentAward={award}
+                setIsEditing={setIsEditing}
             />
         ) : (
-            <AwardCard
-                curAward = {award}
-                isEditable = {isEditable}
-                setIsEditing = {setIsEditing}
+            <AwardCard 
+                award={award}
+                isEditable={isEditable}
+                setIsEditing={setIsEditing}   
             />
         )}
     </>
