@@ -66,7 +66,7 @@ function Portfolio() {
           <div style={{ textAlign: "center" }}>
             <Awards
               ownerId={portfolioOwner.id}
-              isEditable={}
+              // isEditable={}
             />
           </div>
 
