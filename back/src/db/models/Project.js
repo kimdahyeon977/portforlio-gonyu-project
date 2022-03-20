@@ -5,7 +5,7 @@ class Project {
     return createdNewProject;
   }
   async findById({ id }) {//해당 플젝 찾기
-    const project = await ProjectModel.findOne({ id: id });
+    const project = await ProjectModel.findOne({id: id });
     return project;
   }
 
@@ -29,10 +29,12 @@ class Project {
     return projects;
   }
   async deleteById({id}){ //삭제
-    const deletedProject= await ProjectModel.deleteOne({id: id})
+    const deletedProject= await ProjectModel.find({id:id})
     return deletedProject
   }
 }
 //싱글톤 사용해보기
-let project=new Project();
+const project=new Project();
 export { project };
+
+
