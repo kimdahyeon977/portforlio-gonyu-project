@@ -2,11 +2,10 @@ import is from "@sindresorhus/is"; //어떤 모듈인지
 import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
 import { login_required } from "../middlewares/login_required";
-import { checkPermission } from "../middlewares/checkpermission";
 const projectRouter = Router();
 projectRouter.use(login_required)
-//projectRouter.use(checkPermission)
-projectRouter.post("/register",//checkPermission, 
+
+projectRouter.post("/project/create",
 async function (req, res, next) { //추가
   try {
     if (is.emptyObject(req.body)) {
@@ -18,66 +17,79 @@ async function (req, res, next) { //추가
     // req (request) 에서 데이터 가져오기
     const title = req.body.title;
     const task = req.body.task;
-    const date = req.body.date;
-
+    const user_id= req.currentUserId;
+    const from_date = req.body.from_date;
+    const to_date = req.body.to_date;
     // 위 데이터를 유저 db에 추가하기
     const newProject = await projectService.add({
       title,
+      user_id,
       task,
-      date,
+      from_date,
+      to_date
     });
-
     if (newProject.errorMessage) {
       throw new Error(newProject.errorMessage);
     }
-    console.log(req.body)
+
     res.status(201).json(newProject);
   } catch (error) {
     next(error);
   }
 });
-projectRouter.get('/:projectId',
-//checkPermission, 
-async(req,res,next)=>{ //projectId로 조회
+projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
   try{
-      const {projectId} = req.params
-      const project=await projectService.find({projectId})
+      const id = req.params.id;
+      const project = await projectService.find({ id });
+      
       if(project.errorMessage){
-        throw new Error(project.errorMessage)
-    }
-      res.status(200).send(project)
-  }catch(err){
-    next(err)
+          throw new Error(project.errorMessage);
+      }
+      res.status(200).send(project);
+
+  } catch(err) {
+      next(err);
   }
 })
 
-projectRouter.get('/:userId',async(req,res,next)=>{ //userId로 조회
-  try{
-    const {userId} = req.params
-      const projects=await projectService.findList({userId})
-      res.status(200).send(projects)
-      if(projects.errorMessage){
-            throw new Error(projects.errorMessage)}
-      res.status(200).send(projects)
-  }catch(err){
-    next(err)
-  }
-})
+
+
+projectRouter.get(
+  "/projectlist/:id",
+  async(req,res,next)=>{ //유저아이디로 조회
+    try{
+        const user_id = req.params.id
+        const currentUserInfo = await projectService.getUserInfo({user_id});
+        if(currentUserInfo.errorMessage){
+          throw new Error(currentUserInfo.errorMessage)
+      }
+        res.status(200).send(currentUserInfo)
+    }catch(err){
+      next(err);
+    }
+  })
+  
 
 projectRouter.put( //수정
-  "/:projectId", //checkPermission,
+  "/project/:id",
   async function (req, res, next) {
     try {
-      const {projectId} = req.params
+      const {id} = req.params
+      const permission = await projectService.find({id});
+      //console.log(permission.user_id)
+      if(permission.user_id != req.currentUserId){
+        throw new Error("작성자만 수정가능합니다.");
+      }
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const title = req.body.title ?? null;
       const task = req.body.task ?? null;
-      const date = req.body.date ?? null;
+      const from_date = req.body.from_date ?? null;
+      const to_date = req.body.to_date ?? null;
 
-      const toUpdate = { title, task, date };
+      const toUpdate = { title, task, from_date, to_date };
 
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
-      const updatedProject = await projectService.set({ projectId, toUpdate });
+      const updatedProject = await projectService.set({ id, toUpdate });
 
       if (updatedProject.errorMessage) {
         throw new Error(updatedProject.errorMessage);
@@ -90,11 +102,16 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/:projectId", //checkPermission,
+
+projectRouter.delete("/project/:id", 
 async (req, res, next) => {
   try{
-    const {projectId} = req.params
-    const deletedProject= await projectService.delete({ projectId });
+    const {id} = req.params
+    const permission = await projectService.find({id});
+    if(permission.user_id != req.currentUserId){
+      throw new Error("작성자만 삭제가능합니다.");
+    }
+    const deletedProject= await projectService.delete({ id });
     if (deletedProject.errorMessage) {
       throw new Error(deletedProject.errorMessage);
     }
