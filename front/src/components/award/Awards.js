@@ -37,7 +37,7 @@ function Awards({ownerId, isEditable}){
                 isEditable && (
                     <Row className={"text-center"}>
                         <Col>
-                            <Button onClick={()=>setIsInserting(true)}></Button>
+                            <Button onClick={()=>setIsInserting(true)}>Edit</Button>
                         </Col>
                     </Row>
                 )
@@ -45,8 +45,8 @@ function Awards({ownerId, isEditable}){
             {
                 isInserting && (
                     <AwardInsertingForm
-                        ownerId = {ownerId}
                         setIsInserting = {setIsInserting}
+                        ownerId = {ownerId}
                         setAwards = {setAwards}
                     />
                 )
