@@ -6,6 +6,7 @@ import { UserStateContext } from "../App";
 import * as Api from "../api";
 import User from "./user/User";
 import Awards from "./award/Awards";
+import EducationLevel from "./education/EducationLevel";
 
 function Portfolio() {
   const navigate = useNavigate();
@@ -70,6 +71,10 @@ function Portfolio() {
             />
           </div>
 
+          <EducationLevel
+            portfolioOwnerId={portfolioOwner.id}
+            isEditable={portfolioOwner.id === userState.user?.id}
+            />
         </Col>
       </Row>
     </Container>
