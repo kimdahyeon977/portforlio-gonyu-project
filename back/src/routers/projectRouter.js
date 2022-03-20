@@ -27,11 +27,9 @@ async function (req, res, next) { //추가
       task,
       date,
     });
-
     if (newProject.errorMessage) {
       throw new Error(newProject.errorMessage);
     }
-    if(userId !== user_id) throw new Error('접근권한이 없습니다.');
 
     res.status(201).json(newProject);
   } catch (error) {
@@ -76,6 +74,10 @@ projectRouter.put( //수정
   async function (req, res, next) {
     try {
       const {id} = req.params
+      const permission = await projectService.find({id});
+      if(permission.userId != userId){
+        throw new Error("작성자만 수정가능합니다.");
+      }
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const title = req.body.title ?? null;
       const task = req.body.task ?? null;
@@ -98,11 +100,14 @@ projectRouter.put( //수정
 );
 
 
-
 projectRouter.delete("/project/:id", 
 async (req, res, next) => {
   try{
     const {id} = req.params
+    const permission = await projectService.find({id});
+    if(permission.userId != userId){
+      throw new Error("작성자만 삭제가능합니다.");
+    }
     const deletedProject= await projectService.delete({ id });
     if (deletedProject.errorMessage) {
       throw new Error(deletedProject.errorMessage);
