@@ -48,12 +48,19 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
     // URI로부터 수상 데이터 id를 추출함.
     const award_Id = req.params.id;
 
+    const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
+
+    if (req.currentUserId !== currentUserInfo.user_id){
+        res.status(400).send('아이디가 달라 삭제 할 수 없습니다.')
+    }
+    
+
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
     const description = req.body.description ?? null;
 
-    const toUpdate = { title, description };
-
+    const toUpdate = { title, description }; 
+    
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
     const award = await AwardService.setAward({ award_Id, toUpdate });
 
@@ -87,6 +94,13 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 �
   try {
     const award_Id = req.params.id
 
+    const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
+
+    if (req.currentUserId !== currentUserInfo.user_id){
+        res.status(400).send('아이디가 달라 삭제 할 수 없습니다.')
+    }
+
+    
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await AwardService.deleteAward({ award_Id });
 

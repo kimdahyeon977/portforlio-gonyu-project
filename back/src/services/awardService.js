@@ -33,6 +33,7 @@ class AwardService {
       return { errorMessage };
     }
 
+
     // 업데이트 대상에 name이 있다면, 즉 name 값이 null 이 아니라면 업데이트 진행
     if (toUpdate.title) {
       const fieldToUpdate = "title";
