@@ -99,17 +99,26 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
   try {
     // req (request) 에서 id 가져오기
     const certificateId = req.params.id;
-
-    // 위 id를 이용하여 db에서 데이터 삭제하기
-    const result = await CertificateService.deleteCertificate({
+    const certificate = await CertificateService.getCertificate({
       certificateId,
     });
 
-    if (result.errorMessage) {
-      throw new Error(result.errorMessage);
+    if (certificate.user_id !== req.currentUserId) {
+      res.status(400).send("자격증을 수정할 권한이 없습니다.");
     }
 
-    res.status(200).send(result);
+    if (certificate.user_id !== req.currentUserId) {
+      // 위 id를 이용하여 db에서 데이터 삭제하기
+      const result = await CertificateService.deleteCertificate({
+        certificateId,
+      });
+
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
+      }
+
+      res.status(200).send(result);
+    }
   } catch (error) {
     next(error);
   }
