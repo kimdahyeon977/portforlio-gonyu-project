@@ -1,7 +1,7 @@
 import { project as Project } from "../db/models/Project"; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
 class projectService {
-  async add({ user_id,title, task, date }) { //추가
-    const newProject = {  user_id, title, task, date }; 
+  async add({ user_id,title, task, from_date, to_date }) { //추가
+    const newProject = {  user_id, title, task, from_date, to_date }; 
 
     // db에 저장
     const createdNewProject = await Project.create({ newProject });

@@ -20,8 +20,6 @@ function login_required(req, res, next) {
     const jwtDecoded = jwt.verify(userToken, process.env.JWT_SECRET_KEY);
     const userId = jwtDecoded.user_id;
     req.currentUserId = userId;
-    let currentUserId = userId;
-    global.userId = currentUserId;
     //console.log(req.currentUserId)
     next();
   
