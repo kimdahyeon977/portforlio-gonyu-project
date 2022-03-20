@@ -95,34 +95,38 @@ certificateRouter.put(
   }
 );
 
-certificateRouter.delete("/certificates/:id", async function (req, res, next) {
-  try {
-    // req (request) 에서 id 가져오기
-    const certificateId = req.params.id;
-    const certificate = await CertificateService.getCertificate({
-      certificateId,
-    });
-
-    if (certificate.user_id !== req.currentUserId) {
-      res.status(400).send("자격증을 삭제할 권한이 없습니다.");
-    }
-
-    if (certificate.user_id === req.currentUserId) {
-      // 위 id를 이용하여 db에서 데이터 삭제하기
-      const result = await CertificateService.deleteCertificate({
+certificateRouter.delete(
+  "/certificates/:id",
+  login_required,
+  async function (req, res, next) {
+    try {
+      // req (request) 에서 id 가져오기
+      const certificateId = req.params.id;
+      const certificate = await CertificateService.getCertificate({
         certificateId,
       });
 
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
+      if (certificate.user_id !== req.currentUserId) {
+        res.status(400).send("자격증을 삭제할 권한이 없습니다.");
       }
 
-      res.status(200).send(result);
+      if (certificate.user_id === req.currentUserId) {
+        // 위 id를 이용하여 db에서 데이터 삭제하기
+        const result = await CertificateService.deleteCertificate({
+          certificateId,
+        });
+
+        if (result.errorMessage) {
+          throw new Error(result.errorMessage);
+        }
+
+        res.status(200).send(result);
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 certificateRouter.get(
   "/certificatelist/:user_id",

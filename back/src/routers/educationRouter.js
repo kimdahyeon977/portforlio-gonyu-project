@@ -90,30 +90,34 @@ educationRouter.put(
   }
 );
 
-educationRouter.delete("/educations/:id", async function (req, res, next) {
-  try {
-    // req (request) 에서 id 가져오기
-    const educationId = req.params.id;
-    const education = await EducationService.getEducation({ educationId });
+educationRouter.delete(
+  "/educations/:id",
+  login_required,
+  async function (req, res, next) {
+    try {
+      // req (request) 에서 id 가져오기
+      const educationId = req.params.id;
+      const education = await EducationService.getEducation({ educationId });
 
-    if (education.user_id !== req.currentUserId) {
-      res.status(400).send("학력을 삭제할 권한이 없습니다.");
-    }
-
-    if (education.user_id === req.currentUserId) {
-      // 위 id를 이용하여 db에서 데이터 삭제하기
-      const result = await EducationService.deleteEducation({ educationId });
-
-      if (result.errorMessage) {
-        throw new Error(result.errorMessage);
+      if (education.user_id !== req.currentUserId) {
+        res.status(400).send("학력을 삭제할 권한이 없습니다.");
       }
 
-      res.status(200).send(result);
+      if (education.user_id === req.currentUserId) {
+        // 위 id를 이용하여 db에서 데이터 삭제하기
+        const result = await EducationService.deleteEducation({ educationId });
+
+        if (result.errorMessage) {
+          throw new Error(result.errorMessage);
+        }
+
+        res.status(200).send(result);
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 educationRouter.get("/educationlist/:user_id", async function (req, res, next) {
   try {
