@@ -51,7 +51,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
     const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
 
     if (req.currentUserId !== currentUserInfo.user_id){
-        res.status(400).send('아이디가 달라 삭제 할 수 없습니다.')
+      throw new Error("해당 아이디가 다릅니다");
     }
     
 
@@ -97,7 +97,7 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 �
     const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
 
     if (req.currentUserId !== currentUserInfo.user_id){
-        res.status(400).send('아이디가 달라 삭제 할 수 없습니다.')
+      throw new Error("해당 아이디가 다릅니다");
     }
 
     
