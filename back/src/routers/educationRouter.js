@@ -52,47 +52,64 @@ educationRouter.get("/educations/:id", async function (req, res, next) {
   }
 });
 
-educationRouter.put("/educations/:id", async function (req, res, next) {
-  try {
-    // URI로부터 수상 데이터 id를 추출함.
-    const educationId = req.params.id;
+educationRouter.put(
+  "/educations/:id",
+  login_required,
+  async function (req, res, next) {
+    try {
+      // URI로부터 수상 데이터 id를 추출함.
+      const educationId = req.params.id;
+      const education = await EducationService.getEducation({ educationId });
 
-    // body data 로부터 업데이트할 수상 정보를 추출함.
-    const school = req.body.school ?? null;
-    const major = req.body.major ?? null;
-    const position = req.body.position ?? null;
+      // body data 로부터 업데이트할 수상 정보를 추출함.
+      const school = req.body.school ?? null;
+      const major = req.body.major ?? null;
+      const position = req.body.position ?? null;
 
-    const toUpdate = { school, major, position };
+      const toUpdate = { school, major, position };
 
-    // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-    const education = await EducationService.setEducation({
-      educationId,
-      toUpdate,
-    });
+      if (education.user_id !== req.currentUserId) {
+        res.status(400).send("학력을 수정할 권한이 없습니다.");
+      }
 
-    if (education.errorMessage) {
-      throw new Error(education.errorMessage);
+      if (education.user_id === req.currentUserId) {
+        // 위 추출된 정보를 이용하여 db의 데이터 수정하기
+        const changedEducation = await EducationService.setEducation({
+          educationId,
+          toUpdate,
+        });
+        if (changedEducation.errorMessage) {
+          throw new Error(changedEducation.errorMessage);
+        }
+
+        res.status(200).send(changedEducation);
+      }
+    } catch (error) {
+      next(error);
     }
-
-    res.status(200).send(education);
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 educationRouter.delete("/educations/:id", async function (req, res, next) {
   try {
     // req (request) 에서 id 가져오기
     const educationId = req.params.id;
+    const education = await EducationService.getEducation({ educationId });
 
-    // 위 id를 이용하여 db에서 데이터 삭제하기
-    const result = await EducationService.deleteEducation({ educationId });
-
-    if (result.errorMessage) {
-      throw new Error(result.errorMessage);
+    if (education.user_id !== req.currentUserId) {
+      res.status(400).send("학력을 삭제할 권한이 없습니다.");
     }
 
-    res.status(200).send(result);
+    if (education.user_id === req.currentUserId) {
+      // 위 id를 이용하여 db에서 데이터 삭제하기
+      const result = await EducationService.deleteEducation({ educationId });
+
+      if (result.errorMessage) {
+        throw new Error(result.errorMessage);
+      }
+
+      res.status(200).send(result);
+    }
   } catch (error) {
     next(error);
   }
