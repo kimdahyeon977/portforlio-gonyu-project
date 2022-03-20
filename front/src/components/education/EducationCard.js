@@ -1,14 +1,28 @@
-import { Card, ListGroup } from "react-bootstrap";
+import { Card, Button, Row, Col} from "react-bootstrap";
 
 function EducationCard({ education, isEditable, setIsEditing }){
   return (
-    <Card style={{ width: '30rem' }}>
-    <ListGroup variant="flush">
-    <ListGroup.Item>{education.school}</ListGroup.Item>
-    <ListGroup.Item>ddd</ListGroup.Item>
-    <ListGroup.Item>Vestibulum  eros</ListGroup.Item>
-  </ListGroup>
-</Card>
+    <Card>
+      <Row className="align-items-center">
+        <Col>
+          <span>{education.school}</span>
+          <br />
+          <span className="text-muted">{`${education.major} (${
+            education.position || ""
+          })`}</span>
+        </Col>
+        {isEditable && (
+          <Col lg="1">
+            <Button
+              variant="outline-info"
+              onClick={() => setIsEditing((editedPage) => !editedPage )}
+            >
+              편집
+            </Button>
+          </Col>
+        )}
+      </Row>
+    </Card>
   )
 }
 
