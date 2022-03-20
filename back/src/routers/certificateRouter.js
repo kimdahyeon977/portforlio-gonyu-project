@@ -77,7 +77,7 @@ certificateRouter.put(
       }
 
       // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-      if (certificate.user_id !== req.currentUserId) {
+      if (certificate.user_id === req.currentUserId) {
         const changedCertificate = await CertificateService.setCertificate({
           certificateId,
           toUpdate,
@@ -104,10 +104,10 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
     });
 
     if (certificate.user_id !== req.currentUserId) {
-      res.status(400).send("자격증을 수정할 권한이 없습니다.");
+      res.status(400).send("자격증을 삭제할 권한이 없습니다.");
     }
 
-    if (certificate.user_id !== req.currentUserId) {
+    if (certificate.user_id === req.currentUserId) {
       // 위 id를 이용하여 db에서 데이터 삭제하기
       const result = await CertificateService.deleteCertificate({
         certificateId,
