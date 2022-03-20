@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import AwardCard from "./AwardCard";
 import AwardEditForm from "./AwardEditForm";
 
-function Award(){
-    const [isEdit, setIsEdit] = useState(false);
+function Award({award, setAwards, isEditable}){
+    const [isEditing, setIsEditing] = useState(false);
     return <>
-        {isEdit ? (
-            <AwardEditForm></AwardEditForm>
+        {isEditing ? (
+            <AwardEditForm
+                setAward = {isEditing}
+                curAward = {award}
+                setIsEditing = {setIsEditing}
+            />
         ) : (
-            <AwardCard></AwardCard>
-        )
-        }
+            <AwardCard
+                curAward = {award}
+                isEditable = {isEditable}
+                setIsEditing = {setIsEditing}
+            />
+        )}
     </>
 }
 
