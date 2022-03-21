@@ -47,9 +47,6 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
     if (user.errorMessage) {
       throw new Error(user.errorMessage);
     }
-    let user_id = user.id;
-    global.user_id = user_id;
-    //console.log(user.Id)
     res.status(200).send(user);
   } catch (error) {
     next(error);
@@ -63,6 +60,7 @@ userAuthRouter.get(
     try {
       // 전체 사용자 목록을 얻음
       const users = await userAuthService.getUsers();
+
       res.status(200).send(users);
     } catch (error) {
       next(error);
@@ -150,3 +148,4 @@ userAuthRouter.get("/afterlogin", login_required, function (req, res, next) {
 });
 
 export { userAuthRouter };
+

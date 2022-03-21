@@ -2,6 +2,7 @@ import is from "@sindresorhus/is"; //어떤 모듈인지
 import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
 import { login_required } from "../middlewares/login_required";
+import { util } from "../middlewares/utils";
 const projectRouter = Router();
 projectRouter.use(login_required)
 
@@ -15,19 +16,10 @@ async function (req, res, next) { //추가
     }
 
     // req (request) 에서 데이터 가져오기
-    const title = req.body.title;
-    const task = req.body.task;
-    const user_id= req.currentUserId;
-    const from_date = req.body.from_date;
-    const to_date = req.body.to_date;
-    // 위 데이터를 유저 db에 추가하기
-    const newProject = await projectService.add({
-      title,
-      user_id,
-      task,
-      from_date,
-      to_date
-    });
+    const user_id = req.currentUserId;
+    const { title, task, from_date, to_date } = req.body;
+    const newProject = await projectService.add({user_id, title, task, from_date, to_date });
+
     if (newProject.errorMessage) {
       throw new Error(newProject.errorMessage);
     }
@@ -53,7 +45,6 @@ projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
 })
 
 
-
 projectRouter.get(
   "/projectlist/:id",
   async(req,res,next)=>{ //유저아이디로 조회
@@ -76,17 +67,10 @@ projectRouter.put( //수정
     try {
       const {id} = req.params
       const permission = await projectService.find({id});
-      //console.log(permission.user_id)
-      if(permission.user_id != req.currentUserId){
-        throw new Error("작성자만 수정가능합니다.");
-      }
+      util.noPermission(permission.user_id, req.currentUserId)
       // body data 로부터 업데이트할 사용자 정보를 추출함.
-      const title = req.body.title ?? null;
-      const task = req.body.task ?? null;
-      const from_date = req.body.from_date ?? null;
-      const to_date = req.body.to_date ?? null;
-
-      const toUpdate = { title, task, from_date, to_date };
+      const { title, task, from_date, to_date } = req.body; 
+      const toUpdate = { title, task, from_date, to_date }; 
 
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedProject = await projectService.set({ id, toUpdate });
@@ -102,21 +86,18 @@ projectRouter.put( //수정
   }
 );
 
-
 projectRouter.delete("/project/:id", 
 async (req, res, next) => {
   try{
     const {id} = req.params
     const permission = await projectService.find({id});
-    if(permission.user_id != req.currentUserId){
-      throw new Error("작성자만 삭제가능합니다.");
-    }
+    util.noPermission(permission.user_id, req.currentUserId)
     const deletedProject= await projectService.delete({ id });
     if (deletedProject.errorMessage) {
       throw new Error(deletedProject.errorMessage);
     }
 
-    res.status(200).json(deletedProject); 
+    res.send("ok")
   }catch (error){
     next(error);
   }
