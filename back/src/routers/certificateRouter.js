@@ -15,17 +15,14 @@ certificateRouter.post("/certificate/create", async function (req, res, next) {
     }
 
     // req (request) 에서 데이터 가져오기
-    const user_id = req.body.user_id;
-    const title = req.body.title;
-    const when_date = req.body.when_date;
-    const description = req.body.description;
+    const { userId, title, whenDate, description } = req.body;
 
     // 위 데이터를 유저 db에 추가하기
     const newCertificate = await CertificateService.addCertificate({
-      user_id,
+      userId,
       title,
+      whenDate,
       description,
-      when_date,
     });
 
     res.status(201).json(newCertificate);
@@ -48,52 +45,48 @@ certificateRouter.get("/certificates/:id", async function (req, res, next) {
       throw new Error(certificate.errorMessage);
     }
 
-    res.status(200).send(certificate);
+    res.status(200).json(certificate);
   } catch (error) {
     next(error);
   }
 });
 
-certificateRouter.put(
-  "/certificates/:id",
-  login_required,
-  async function (req, res, next) {
-    try {
-      // URI로부터 수상 데이터 id를 추출함.
-      const certificateId = req.params.id;
-      const certificate = await CertificateService.getCertificate({
+certificateRouter.put("/certificates/:id", async function (req, res, next) {
+  try {
+    // URI로부터 수상 데이터 id를 추출함.
+    const certificateId = req.params.id;
+    const certificate = await CertificateService.getCertificate({
+      certificateId,
+    });
+
+    // body data 로부터 업데이트할 수상 정보를 추출함.
+    const title = req.body.title ?? null;
+    const description = req.body.description ?? null;
+    const whenDate = req.body.whenDate ?? null;
+
+    const toUpdate = { title, description, whenDate };
+
+    if (certificate.userId !== req.currentUserId) {
+      res.status(400).json("자격증을 수정할 권한이 없습니다.");
+    }
+
+    // 위 추출된 정보를 이용하여 db의 데이터 수정하기
+    if (certificate.userId !== req.currentUserId) {
+      const changedCertificate = await CertificateService.setCertificate({
         certificateId,
+        toUpdate,
       });
 
-      // body data 로부터 업데이트할 수상 정보를 추출함.
-      const title = req.body.title ?? null;
-      const description = req.body.description ?? null;
-      const when_date = req.body.when_date ?? null;
-
-      const toUpdate = { title, description, when_date };
-
-      if (certificate.user_id !== req.currentUserId) {
-        res.status(400).send("자격증을 수정할 권한이 없습니다.");
+      if (changedCertificate.errorMessage) {
+        throw new Error(changedCertificate.errorMessage);
       }
 
-      // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-      if (certificate.user_id !== req.currentUserId) {
-        const changedCertificate = await CertificateService.setCertificate({
-          certificateId,
-          toUpdate,
-        });
-
-        if (changedCertificate.errorMessage) {
-          throw new Error(changedCertificate.errorMessage);
-        }
-
-        res.status(200).send(changedCertificate);
-      }
-    } catch (error) {
-      next(error);
+      res.status(200).json(changedCertificate);
     }
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 certificateRouter.delete("/certificates/:id", async function (req, res, next) {
   try {
@@ -109,23 +102,23 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
       throw new Error(result.errorMessage);
     }
 
-    res.status(200).send(result);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 });
 
 certificateRouter.get(
-  "/certificatelist/:user_id",
+  "/certificatelist/:userId",
   async function (req, res, next) {
     try {
       // 특정 사용자의 전체 수상 목록을 얻음
       // @ts-ignore
-      const user_id = req.params.user_id;
+      const userId = req.params.userId;
       const certificateList = await CertificateService.getCertificateList({
-        user_id,
+        userId,
       });
-      res.status(200).send(certificateList);
+      res.status(200).json(certificateList);
     } catch (error) {
       next(error);
     }
