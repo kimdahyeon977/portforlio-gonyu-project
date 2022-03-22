@@ -33,7 +33,8 @@ class Certificate {
     const deleteResult = await CertificateModel.deleteOne({
       id: certificateId,
     });
-    return deleteResult; //true or false
+    const isDataDeleted = deleteResult.deletedCount === 1;
+    return isDataDeleted;
   }
 }
 
