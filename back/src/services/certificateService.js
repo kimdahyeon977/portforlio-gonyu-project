@@ -16,14 +16,18 @@ class CertificateService {
 
   async getCertificate({ certificateId }) {
     // 해당 id를 가진 데이터가 db에 존재 여부 확인
-    const certificate = await Certificate.findById({ certificateId });
-    if (!certificate) {
-      throw new Error(
-        "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요."
-      );
-    }
+    try {
+      const certificate = await Certificate.findById({ certificateId });
+      if (!certificate) {
+        throw new Error(
+          "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요."
+        );
+      }
 
-    return certificate;
+      return certificate;
+    } catch (error) {
+      next(error);
+    }
   }
 
   async getCertificateList({ userId }) {
@@ -32,59 +36,67 @@ class CertificateService {
   }
 
   async setCertificate({ certificateId, toUpdate }) {
-    let certificate = await Certificate.findById({ certificateId });
+    try {
+      let certificate = await Certificate.findById({ certificateId });
 
-    // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!certificate) {
-      throw new Error(
-        "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요."
-      );
+      // db에서 찾지 못한 경우, 에러 메시지 반환
+      if (!certificate) {
+        throw new Error(
+          "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요."
+        );
+      }
+
+      if (toUpdate.title) {
+        const fieldToUpdate = "title";
+        const newValue = toUpdate.title;
+        certificate = await Certificate.update({
+          certificateId,
+          fieldToUpdate,
+          newValue,
+        });
+      }
+
+      if (toUpdate.description) {
+        const fieldToUpdate = "description";
+        const newValue = toUpdate.description;
+        certificate = await Certificate.update({
+          certificateId,
+          fieldToUpdate,
+          newValue,
+        });
+      }
+
+      if (toUpdate.whenDate) {
+        const fieldToUpdate = "whenDate";
+        const newValue = toUpdate.whenDate;
+        certificate = await Certificate.update({
+          certificateId,
+          fieldToUpdate,
+          newValue,
+        });
+      }
+
+      return certificate;
+    } catch (error) {
+      next(error);
     }
-
-    if (toUpdate.title) {
-      const fieldToUpdate = "title";
-      const newValue = toUpdate.title;
-      certificate = await Certificate.update({
-        certificateId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (toUpdate.description) {
-      const fieldToUpdate = "description";
-      const newValue = toUpdate.description;
-      certificate = await Certificate.update({
-        certificateId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    if (toUpdate.whenDate) {
-      const fieldToUpdate = "whenDate";
-      const newValue = toUpdate.whenDate;
-      certificate = await Certificate.update({
-        certificateId,
-        fieldToUpdate,
-        newValue,
-      });
-    }
-
-    return certificate;
   }
 
   async deleteCertificate({ certificateId }) {
-    const isDataDeleted = await Certificate.deleteById({ certificateId });
+    try {
+      const isDataDeleted = await Certificate.deleteById({ certificateId });
 
-    // db에서 찾지 못한 경우, 에러 메시지 반환
-    if (!isDataDeleted) {
-      throw new Error(
-        "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요. 데이터가 지워지지 않았습니다."
-      );
+      // db에서 찾지 못한 경우, 에러 메시지 반환
+      if (!isDataDeleted) {
+        throw new Error(
+          "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요. 데이터가 지워지지 않았습니다."
+        );
+      }
+
+      return isDataDeleted;
+    } catch (error) {
+      next(error);
     }
-
-    return isDataDeleted;
   }
 }
 
