@@ -1,11 +1,10 @@
-import { Award } from "../db";
-import {v4 as uuidv4} from 'uuid' // 랜덤한 값 생성하는 라이브러리
+import { award as Award } from "../db";
+
 
 class AwardService {
-    static async addAward({user_id,title,description}) {
+     async addAward({userId,title,description}) {
       
-      const id = uuidv4()
-      const newAward = {id,user_id,title,description};
+      const newAward = {userId,title,description};
   
       // db에 저장
       const createdNewAward = await Award.create({ newAward });
@@ -15,22 +14,20 @@ class AwardService {
     }
 
 
-    static async getAwardList({ user_id }) {
-      const awards = await Award.findByUserId({ user_id });
+   async getAwardList({ userId }) {
+      const awards = await Award.findByUserId({ userId });
       return awards;
     }
 
 
 
-  static async setAward({ award_Id, toUpdate }) {
+  async setAward({ awardId, toUpdate }) {
     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
-    let award = await Award.findById({ award_Id });
+    let award = await Award.findById({ awardId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
-      const errorMessage =
-        "수상내역 없음";
-      return { errorMessage };
+      throw new Error("수상내역 없음")
     }
 
 
@@ -38,47 +35,45 @@ class AwardService {
     if (toUpdate.title) {
       const fieldToUpdate = "title";
       const newValue = toUpdate.title;
-      award = await Award.update({ award_Id, fieldToUpdate, newValue });
+      award = await Award.update({ awardId, fieldToUpdate, newValue });
     }
 
 
     if (toUpdate.description) {
       const fieldToUpdate = "description";
       const newValue = toUpdate.description;
-      award = await Award.update({ award_Id, fieldToUpdate, newValue });
+      award = await Award.update({ awardId, fieldToUpdate, newValue });
     }
 
     return award;
   }
 
-  static async getAwardInfo({ award_Id }) {
-    const award = await Award.findById({ award_Id });
+  async getAwardInfo({ awardId }) {
+    const award = await Award.findById({ awardId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
-      const errorMessage =
-        "해당 수상 내역 X";
-      return { errorMessage };
+      throw new Error("수상내역 없음")
     }
 
     return award;
   }
 
 
-  static async deleteAward({ award_Id }) {//삭제
+  async deleteAward({ awardId }) {//삭제
 
-    let awardDel = await Award.findById({ award_Id });
+    let awardDel = await Award.findById({ awardId });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!awardDel) {
-      const errorMessage =
-        "해당 수상내역 X";
-      return { errorMessage };
+      throw new Error("수상내역 없음") 
     }
 
-    const awardDelete = await Award.deleteByid({ award_Id });
+    const awardDelete = await Award.deleteByid({ awardId });
     return awardDelete
   }
   
 }
-export {AwardService}
+
+const awardService = new AwardService()
+export {awardService}
