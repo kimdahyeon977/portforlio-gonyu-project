@@ -3,7 +3,7 @@ const id=require('./types/projectId.js')//projectId가 자동으로 생성되서
 const projectSchema = Schema(
   {
     id, //프로젝트 고유아이디
-    user_id:{ //프로젝트 이름
+    userId:{ //로그인한 유저이름
       type: String,
       required: true,
     },

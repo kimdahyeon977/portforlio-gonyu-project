@@ -16,9 +16,9 @@ async function (req, res, next) { //추가
     }
 
     // req (request) 에서 데이터 가져오기
-    const user_id = req.currentUserId;
+    const userId = req.currentUserId;
     const { title, task, from_date, to_date } = req.body;
-    const newProject = await projectService.add({user_id, title, task, from_date, to_date });
+    const newProject = await projectService.add({userId, title, task, from_date, to_date });
 
     if (newProject.errorMessage) {
       throw new Error(newProject.errorMessage);
@@ -49,8 +49,8 @@ projectRouter.get(
   "/projectlist/:id",
   async(req,res,next)=>{ //유저아이디로 조회
     try{
-        const user_id = req.params.id
-        const currentUserInfo = await projectService.getUserInfo({user_id});
+        const userId = req.params.id
+        const currentUserInfo = await projectService.getUserInfo({userId});
         if(currentUserInfo.errorMessage){
           throw new Error(currentUserInfo.errorMessage)
       }
@@ -59,6 +59,7 @@ projectRouter.get(
       next(err);
     }
   })
+
   
 
 projectRouter.put( //수정
@@ -67,7 +68,7 @@ projectRouter.put( //수정
     try {
       const {id} = req.params
       const permission = await projectService.find({id});
-      util.noPermission(permission.user_id, req.currentUserId)
+      util.noPermission(permission.userId, req.currentUserId)
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, from_date, to_date } = req.body; 
       const toUpdate = { title, task, from_date, to_date }; 
@@ -91,7 +92,7 @@ async (req, res, next) => {
   try{
     const {id} = req.params
     const permission = await projectService.find({id});
-    util.noPermission(permission.user_id, req.currentUserId)
+    util.noPermission(permission.userId, req.currentUserId)
     const deletedProject= await projectService.delete({ id });
     if (deletedProject.errorMessage) {
       throw new Error(deletedProject.errorMessage);

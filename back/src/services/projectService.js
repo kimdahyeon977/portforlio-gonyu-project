@@ -1,7 +1,7 @@
 import { project as Project } from "../db/models/Project"; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
 class projectService {
-  async add({ user_id,title, task, from_date, to_date }) { //추가
-    const newProject = {  user_id, title, task, from_date, to_date }; 
+  async add({ userId,title, task, from_date, to_date }) { //추가
+    const newProject = {  userId, title, task, from_date, to_date }; 
 
     // db에 저장
     const createdNewProject = await Project.create({ newProject });
@@ -20,8 +20,8 @@ class projectService {
     return project;
   }
   
-  async getUserInfo({ user_id }) {
-    const projects = await Project.findByUserId({ user_id });
+  async getUserInfo({ userId }) {
+    const projects = await Project.findByUserId({ userId }).sort({to_date: -1})
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!projects) {

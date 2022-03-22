@@ -23,8 +23,8 @@ class Project {
   }
 
   
-  async findByUserId({ user_id }) { //해당 유저찾기
-    const projects = await ProjectModel.find({ user_id: user_id });
+  async findByUserId({ userId }) { //해당 유저찾기
+    const projects = await ProjectModel.find({ user_id: userId });
     return projects;
   }
   async deleteById({id}){ //삭제
