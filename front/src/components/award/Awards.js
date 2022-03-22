@@ -10,12 +10,12 @@ function Awards({ownerId, isEditable}){
 
     // ownerId의 수상목록을 한 번 불러옴
     useEffect(() => {
-        API.get("awardList", ownerId)
+        API.get("awardlist", ownerId)
             .then((res) => {
                 // useState의 setAwards를 이용해서 awards에 수상목록 배열을 저장
                 return setAwards(res.data);
             })
-    })
+    }, [ownerId])
 
     return <Card>
         <Card.Body>

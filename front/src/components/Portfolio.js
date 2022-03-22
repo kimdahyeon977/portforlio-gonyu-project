@@ -63,13 +63,10 @@ function Portfolio() {
           />
         </Col>
         <Col>
-
-          <div style={{ textAlign: "center" }}>
-            <Awards
-              ownerId={portfolioOwner.id}
-              // isEditable={}
-            />
-          </div>
+          <Awards className={"text-center"}
+            ownerId={portfolioOwner.id}
+            isEditable={portfolioOwner.id === userState.user?.id}
+          />
 
           <EducationLevel
             portfolioOwnerId={portfolioOwner.id}
