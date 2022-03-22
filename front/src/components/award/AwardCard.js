@@ -11,7 +11,7 @@ function AwardCard({award, isEditable, setIsEditing}){
                 isEditable && (
                     <Col>
                         <Button
-                            varient="outline-info"
+                            variant="info"
                             onClick={()=>{setIsEditing(true)}}
                         >
                             Edit
