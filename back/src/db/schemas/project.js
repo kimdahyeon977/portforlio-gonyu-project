@@ -15,11 +15,11 @@ const projectSchema = Schema(
       type: String,
       required: true,
     },
-    from_date: { //프로젝트 수행 날짜
+    fromDate: { //프로젝트 수행 날짜
       type: Date,
       required: true,
     },
-    to_date: {
+    toDate: {
       type: Date,
       required: true,
     }

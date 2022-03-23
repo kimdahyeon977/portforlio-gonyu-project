@@ -125,9 +125,9 @@ class adminAuthService {
 
     return admin;
   }
-  async delete({ id }) {//삭제
+  async delete({ admin_id }) {//삭제
     // 우선 삭제할 projectid 의 플젝이 db에 존재하는지 여부 확인
-    let adminTodelete = await Admin.findById({ id });
+    let adminTodelete = await Admin.findById({ admin_id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!adminTodelete) {
@@ -135,7 +135,7 @@ class adminAuthService {
         "삭제할 관리자가 없습니다. 다시 한 번 확인해 주세요.";
       return { errorMessage };
     }
-    const admin = await Admin.deleteById({id})
+    const admin = await Admin.deleteById({admin_id})
     return admin;
   };
 }

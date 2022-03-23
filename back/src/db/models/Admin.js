@@ -15,7 +15,7 @@ class Admin{
     return user;
   }
   async findByEmail({ email }) {
-    const user = await AdminModel.findOne({ email: email });
+    const user = await AdminModel.findOne({ email });
     return user;
   }
 
@@ -31,8 +31,8 @@ class Admin{
     );
     return updatedAdmin;
   }
-  async deleteById({id}){ //삭제
-    const deletedProject= await ProjectModel.find({id:id})
+  async deleteById({admin_id}){ //삭제
+    const deletedProject= await ProjectModel.find({id:admin_id })
     return deletedProject
   }
 }

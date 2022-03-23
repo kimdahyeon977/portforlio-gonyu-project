@@ -1,34 +1,18 @@
-import { Schema, model } from "mongoose";
+const mongoose=require('mongoose')
 
-const AdminSchema = new Schema(
+const AdminSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: false,
-      default: "설명이 아직 없습니다. 추가해 주세요.",
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+    encryptedPassword: {
+       type: String, required: true, 
+      },
+    role: { 
+      type: String, enum: ['admin', 'member'],
+       required: true }
+  }) 
 
-const AdminModel = model("Admin", AdminSchema);
+  module.exports= mongoose.model('admin', AdminSchema)
 
-export { AdminModel };

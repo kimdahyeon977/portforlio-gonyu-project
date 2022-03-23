@@ -3,7 +3,8 @@ import { User } from "./models/User";
 
 const DB_URL =
   process.env.MONGODB_URL 
-  
+
+
 mongoose.connect(DB_URL);
 const db = mongoose.connection;
 

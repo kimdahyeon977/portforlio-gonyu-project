@@ -142,10 +142,10 @@ adminAuthRouter.get(
 adminAuthRouter.delete("/admin/:id", 
 async (req, res, next) => {
   try{
-    const {id} = req.params
+    const {admin_id} = req.params
     const permission = await adminservice.getAdmin({admin_id});
     util.noPermission(permission.id, req.currentUserId)
-    const deletedAdmin= await adminservice.delete({ id });
+    const deletedAdmin= await adminservice.delete({ admin_id });
     if (deletedAdmin.errorMessage) {
       throw new Error(deletedAdmin.errorMessage);
     }
