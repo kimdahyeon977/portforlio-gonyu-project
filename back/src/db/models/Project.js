@@ -24,7 +24,7 @@ class Project {
 
   
   async findByUserId({ userId }) { //해당 유저찾기
-    const projects = await ProjectModel.find({ userId });
+    const projects = await ProjectModel.find({ userId }).sort({fromDate:-1});
     return projects;
   }
   async deleteById({projectId}){ //삭제
