@@ -1,7 +1,7 @@
 var util= {};
 util.noPermission= function(requester,owner){
-    if(requester!==owner){
-        throw new Error("No Permission!")
+    if(requester.userId==owner || requester.role==='admin'){
+        return
     }
 }
 export {util};

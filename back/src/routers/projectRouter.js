@@ -68,7 +68,8 @@ projectRouter.put( //수정
     try {
       const projectId = req.params.id
       const permission = await projectService.getProject({projectId});
-      util.noPermission(permission.userId, req.currentUserId)
+      util.noPermission(permission, req.currentUserId)
+      console.log(permission.role)
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 

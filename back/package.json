@@ -24,6 +24,7 @@
     "@sindresorhus/is": "^4.2.0",
     "admin-bro": "^4.0.1",
     "admin-bro-expressjs": "^2.1.1",
+    "adminjs": "^5.7.3",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
