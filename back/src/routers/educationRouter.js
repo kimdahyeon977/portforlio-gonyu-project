@@ -57,7 +57,9 @@ educationRouter.put("/educations/:id", async function (req, res, next) {
     const school = req.body.school ?? null;
     const major = req.body.major ?? null;
     const position = req.body.position ?? null;
-    const toUpdate = { school, major, position };
+    const admissionDate = req.body.admissionDate ?? null;
+    const graduationDate = req.body.graduationDate ?? null;
+    const toUpdate = { school, major, position, admissionDate, graduationDate };
 
     utils.editPermission(education.userId, req.currentUserId);
 
