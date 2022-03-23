@@ -9,10 +9,11 @@ function AwardCard({award, isEditable, setIsEditing}){
             </Col>
             {
                 isEditable && (
-                    <Col>
+                    <Col className="d-flex justify-content-end">
                         <Button
                             variant="info"
                             onClick={()=>{setIsEditing(true)}}
+                            style={{height : '80%'}}
                         >
                             Edit
                         </Button>

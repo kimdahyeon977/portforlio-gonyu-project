@@ -22,26 +22,26 @@ function Awards({ownerId, isEditable}){
             <Card.Title>
                 수상목록
             </Card.Title>
-            {
-                awards.map((item) => 
-                    <Award
-                        key = {item.id}
-                        award = {item}
-                        setAward = {setAwards}
-                        isEditable = {isEditable}
-                    >
-                    </Award>
-                )
-            }
-            {
-                isEditable && (
-                    <Row className={"text-center"}>
-                        <Col>
+            <Row>
+                {
+                    awards.map((item) => 
+                        <Award
+                            key = {item.id}
+                            award = {item}
+                            setAward = {setAwards}
+                            isEditable = {isEditable}
+                        >
+                        </Award>
+                    )
+                }
+                {
+                    isEditable && (
+                        <Col className="text-center">
                             <Button onClick={()=>setIsInserting(true)}>+</Button>
                         </Col>
-                    </Row>
-                )
-            }
+                    )
+                }
+            </Row>
             {
                 isInserting && (
                     <AwardInsertingForm
