@@ -3,6 +3,8 @@ import { Router } from "express";
 import { login_required } from "../middlewares/login_required";
 import { certificateService } from "../services/certificateService";
 
+import { utils } from "../common/utils";
+
 const certificateRouter = Router();
 certificateRouter.use(login_required);
 
@@ -40,7 +42,6 @@ certificateRouter.get("/certificates/:id", async function (req, res, next) {
     const certificate = await certificateService.getCertificate({
       certificateId,
     });
-
     res.status(200).json(certificate);
   } catch (error) {
     next(error);
@@ -59,12 +60,9 @@ certificateRouter.put("/certificates/:id", async function (req, res, next) {
     const title = req.body.title ?? null;
     const description = req.body.description ?? null;
     const whenDate = req.body.whenDate ?? null;
-
     const toUpdate = { title, description, whenDate };
 
-    if (certificate.userId !== req.currentUserId) {
-      throw new Error("자격증을 수정할 권한이 없습니다.");
-    }
+    utils.editPermission(certificate.userId, req.currentUserId);
 
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
     const changedCertificate = await certificateService.setCertificate({
@@ -85,15 +83,12 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
     const certificate = await certificateService.getCertificate({
       certificateId,
     });
-    // 위 id를 이용하여 db에서 데이터 삭제하기
-    if (certificate.userId !== req.currentUserId) {
-      throw new Error("자격증을 삭제할 권한이 없습니다.");
-    }
 
+    utils.deletePermission(certificate.userId, req.currentUserId);
+    // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await certificateService.deleteCertificate({
       certificateId,
     });
-
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -101,13 +96,15 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
 });
 
 certificateRouter.get(
-  "/certificatelist/:userId",
+  "/certificatelist/:userId/:sortKey?",
   async function (req, res, next) {
     try {
       // 특정 사용자의 전체 수상 목록을 얻음
       const userId = req.params.userId;
+      const sortKey = req.query;
       const certificateList = await certificateService.getCertificateList({
         userId,
+        sortKey,
       });
       res.status(200).json(certificateList);
     } catch (error) {
