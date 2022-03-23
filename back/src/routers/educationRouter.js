@@ -3,6 +3,8 @@ import { Router } from "express";
 import { login_required } from "../middlewares/login_required";
 import { educationService } from "../services/educationService";
 
+import { utils } from "../common/utils";
+
 const educationRouter = Router();
 educationRouter.use(login_required);
 
@@ -15,7 +17,7 @@ educationRouter.post("/education/create", async function (req, res, next) {
     }
 
     // req (request) 에서 데이터 가져오기
-    const { userId, school, major, position } = req.body;
+    const { userId, school, major, position, admissionDate } = req.body;
 
     // 위 데이터를 유저 db에 추가하기
     const newEducation = await educationService.addEducation({
@@ -23,6 +25,7 @@ educationRouter.post("/education/create", async function (req, res, next) {
       school,
       major,
       position,
+      admissionDate,
     });
 
     res.status(201).json(newEducation);
@@ -38,7 +41,6 @@ educationRouter.get("/educations/:id", async function (req, res, next) {
 
     // 위 id를 이용하여 db에서 데이터 찾기
     const education = await educationService.getEducation({ educationId });
-
     res.status(200).send(education);
   } catch (error) {
     next(error);
@@ -55,12 +57,9 @@ educationRouter.put("/educations/:id", async function (req, res, next) {
     const school = req.body.school ?? null;
     const major = req.body.major ?? null;
     const position = req.body.position ?? null;
-
     const toUpdate = { school, major, position };
 
-    if (education.userId !== req.currentUserId) {
-      throw new Error("학력을 수정할 권한이 없습니다.");
-    }
+    utils.editPermission(education.userId, req.currentUserId);
 
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
     const changedEducation = await educationService.setEducation({
@@ -80,29 +79,32 @@ educationRouter.delete("/educations/:id", async function (req, res, next) {
     const educationId = req.params.id;
     const education = await educationService.getEducation({ educationId });
 
-    if (education.userId !== req.currentUserId) {
-      throw new Error("학력을 삭제할 권한이 없습니다.");
-    }
+    utils.deletePermission(education.userId, req.currentUserId);
 
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await educationService.deleteEducation({ educationId });
-
     res.status(200).send(result);
   } catch (error) {
     next(error);
   }
 });
 
-educationRouter.get("/educationlist/:userId", async function (req, res, next) {
-  try {
-    // 특정 사용자의 전체 수상 목록을 얻음
-    // @ts-ignore
-    const userId = req.params.userId;
-    const educationList = await educationService.getEducationList({ userId });
-    res.status(200).send(educationList);
-  } catch (error) {
-    next(error);
+educationRouter.get(
+  "/educationlist/:userId/:sortKey?",
+  async function (req, res, next) {
+    try {
+      // 특정 사용자의 전체 수상 목록을 얻음
+      const userId = req.params.userId;
+      const sortKey = req.query;
+      const educationList = await educationService.getEducationList({
+        userId,
+        sortKey,
+      });
+      res.status(200).send(educationList);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 export { educationRouter };

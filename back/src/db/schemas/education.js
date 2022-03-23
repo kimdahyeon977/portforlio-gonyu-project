@@ -25,6 +25,15 @@ const EducationSchema = new Schema(
       type: String,
       required: true,
     },
+    admissionDate: {
+      type: Date,
+      required: true,
+    },
+    graduationDate: {
+      //position에 따라 달라지니 필수 값이 아닐 수 있다.
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
