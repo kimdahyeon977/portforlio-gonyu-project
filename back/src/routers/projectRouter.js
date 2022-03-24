@@ -14,16 +14,14 @@ async function (req, res, next) { //추가
         "headers의 Content-Type을 application/json으로 설정해주세요"
       );
     }
-
     // req (request) 에서 데이터 가져오기
     const userId = req.currentUserId;
     const { title, task, fromDate, toDate } = req.body;
     const newProject = await projectService.addProject({userId, title, task, fromDate, toDate });
 
-    if (newProject.errorMessage) {
+    if(newProject.errorMessage){
       throw new Error(newProject.errorMessage);
     }
-
     res.status(201).json(newProject);
   } catch (error) {
     next(error);
@@ -59,6 +57,19 @@ projectRouter.get(
       next(err);
     }
   })
+projectRouter.get(
+    "/projectlist",
+    async function (req, res, next) {
+      try {
+        // 전체 플젝목록을 얻음
+        util.adminshow(req.currentUserId)//해당부분 에러발생
+        const projects = await userAuthService.getProjects();
+        res.status(200).send(projects);
+      } catch (error) {
+        next(error);
+      }
+    }
+  )
 
   
 
@@ -69,7 +80,6 @@ projectRouter.put( //수정
       const projectId = req.params.id
       const permission = await projectService.getProject({projectId});
       util.noPermission(permission, req.currentUserId)
-      console.log(permission.role)
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 

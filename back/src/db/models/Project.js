@@ -21,10 +21,13 @@ class Project {
     );
     return updatedProject;
   }
-
+  async findAll() { //관리자모드에서 플젝 모두 모아보기
+    const projects = await ProjectModel.find({});
+    return projects;
+  }
   
   async findByUserId({ userId }) { //해당 유저찾기
-    const projects = await ProjectModel.find({ userId }).sort({fromDate:-1});
+    const projects = await ProjectModel.find({ userId }).sort({fromDate:-1}); //가장 최근에 진행한 플젝을 앞으로가게 정렬!
     return projects;
   }
   async deleteById({projectId}){ //삭제
