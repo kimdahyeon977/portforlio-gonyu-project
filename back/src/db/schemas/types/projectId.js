@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 
-const projectId = {
+const id = {
   type: String,
   default: () => {
     return nanoid()
@@ -9,4 +9,4 @@ const projectId = {
   index: true,
 }
 
-module.exports = projectId;
+module.exports = id;

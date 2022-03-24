@@ -8,10 +8,9 @@ import { Awardrouter } from "./routers/awardRouter";
 import { login_required } from "./middlewares/login_required";
 
 import { projectRouter } from "./routers/projectRouter";
-const app = express();
+import { login_required } from "./middlewares/login_required";
+const app = express();// CORS 에러 방지
 
-// CORS 에러 방지
-app.use(cors());
 
 // express 기본 제공 middleware
 // express.json(): POST 등의 요청과 함께 오는 json형태의 데이터를 인식하고 핸들링할 수 있게 함.
@@ -28,8 +27,8 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(certificateRouter);
 app.use(educationRouter);
-app.use("/project", projectRouter);
 app.use(login_required,Awardrouter)
+app.use(projectRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨) //제일 아래에 둬야..
 app.use(errorMiddleware);
