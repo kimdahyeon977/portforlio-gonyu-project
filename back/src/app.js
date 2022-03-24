@@ -5,6 +5,7 @@ import { adminAuthRouter } from "./routers/adminRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { projectRouter } from "./routers/projectRouter";
 import { login_required } from "./middlewares/login_required";
+import { Likerouter } from "./routers/likeRouter";
 const app = express();// CORS 에러 방지
 
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(adminAuthRouter);
 app.use(projectRouter);
+app.use(Likerouter)
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨) //제일 아래에 둬야..
 app.use(errorMiddleware);

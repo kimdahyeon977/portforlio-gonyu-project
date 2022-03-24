@@ -45,11 +45,12 @@ projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
 
 
 projectRouter.get(
-  "/projectlist/:id",
+  "/projectlist/:id/:sortKey?",
   async(req,res,next)=>{ //유저아이디로 조회
     try{
         const userId = req.params.id
-        const currentUserInfo = await projectService.getUserInfo({userId});
+        const sortKey=req.query;
+        const currentUserInfo = await projectService.getUserInfo({userId,sortKey});
         if(currentUserInfo.errorMessage){
           throw new Error(currentUserInfo.errorMessage)
       }

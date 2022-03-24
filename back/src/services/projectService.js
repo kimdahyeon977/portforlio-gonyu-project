@@ -19,9 +19,8 @@ class projectService {
     }
     return project;
 }
-  async getUserInfo({ userId }) {
-    const projects = await Project.findByUserId({ userId })
-
+  async getUserInfo({ userId,sortKey }) { 
+    const projects = await Project.findByUserId({ userId ,sortKey})
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!projects) {
       throw new Error("해당 유저는 조회가능내역이 없습니다. 다시 한 번 확인해 주세요.")
