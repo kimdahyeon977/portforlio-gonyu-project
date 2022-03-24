@@ -28,7 +28,7 @@ function Awards({ownerId, isEditable}){
                         <Award
                             key = {item.id}
                             award = {item}
-                            setAward = {setAwards}
+                            setAwards = {setAwards}
                             isEditable = {isEditable}
                         >
                         </Award>

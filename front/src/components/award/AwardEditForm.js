@@ -8,7 +8,7 @@ function AwardEditForm({setAwards, curAward, setIsEditing}){
     const [description, setDescription] = useState(curAward.description)
 
     const submitHandler = async (event) => {
-        event.preventDeafult();
+        event.preventDefault();
         event.stopPropagation();
 
         const newAward = {
@@ -16,12 +16,16 @@ function AwardEditForm({setAwards, curAward, setIsEditing}){
             title,
             description,
         }
+        try {
+            await API.put(`awards/${curAward.id}`, newAward);
+            // const res = await API.get("awardlist", curAward.user_id);
+            // TODO: setAwards로 변경된 award를 awards 반영하기
+            // setAwards(res.data)
+            setIsEditing(false);
 
-        await API.put(`awards/${curAward.id}`, newAward);
-        const res = await API.get("awardlist", curAward.user_id);
-        setAwards(res.data)
-
-        setIsEditing(false);
+        }catch(error){
+            console.error(error);
+        }
     }
 
     return (
