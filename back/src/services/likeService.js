@@ -15,7 +15,7 @@ class LikeService {
         return likeUp;
       }
     async likeCount({userId}){
-        const counts = await Like.findByAdminId({userId})
+        const counts = await Like.findByUserIdCount({userId})
         return counts
     }
 

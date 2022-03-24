@@ -27,12 +27,12 @@ Likerouter.post("/like/add", async function(req,res,next){
     }
 })
 
-Likerouter.get("like/:userId",async function(req,res,next){
+Likerouter.get("/likecount/:userId",async function(req,res,next){
     try {
         const userId = req.params.userId
-        const userInfo = await likeService.likeCount({userId})
+        const counts = await likeService.likeCount({userId})
 
-        res.status(200).send(userInfo)
+        res.status(200).json(counts)
     }catch (error) {
         next(error)
     }
