@@ -5,10 +5,7 @@ class projectService {
     // db에 저장
     const newProject = {  userId, title, task, fromDate, toDate }; 
     const createdNewProject = await Project.create({ newProject });
-    if(!util.isvalid(fromDate)|| !util.isvalid(toDate)){ //isvalid func에서 return값이 없으면
-      throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
-    }
-    if( !userId || !title || !description || !fromDate || !toDate){
+    if( !userId || !title || !fromDate || !toDate){
     throw new Error("필수입력값을 모두 입력해주세요.")
     }
     createdNewProject.errorMessage = null;
@@ -63,21 +60,11 @@ class projectService {
     if (toUpdate.fromDate) {
       const fieldToUpdate = "fromDate";
       const newValue = toUpdate.fromDate;
-      /*
-      if(!util.isvalid(toUpdate.fromDate)){ //isvalid func에서 return값이 없으면
-        throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
-      }
-      */
       project = await Project.update({ projectId, fieldToUpdate, newValue });
     }
     if (toUpdate.toDate) {
       const fieldToUpdate = "toDate";
-      const newValue = toUpdate.toDate;
-      /*
-      if(!util.isvalid(toUpdate.toDate)){ //isvalid func에서 return값이 없으면
-        throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
-      }
-      */
+      const newValue = toUpdate.toDate;   
       project = await Project.update({ projectId, fieldToUpdate, newValue });
     }
 
