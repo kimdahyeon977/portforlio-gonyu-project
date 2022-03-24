@@ -1,14 +1,12 @@
 import mongoose from "mongoose";
 import { User } from "./models/User";
 import { Certificate } from "./models/Certificate";
-import { Award } from "./models/Award";
-import { Education } from "./models/Education";
 import { Project } from "./models/Project";
 
-const DB_URL = process.env.MONGODB_URL; 
-import { award } from  "./models/Award"
+const DB_URL = process.env.MONGODB_URL;
+import { award } from "./models/Award";
 import { Like } from "./models/Like";
-
+import { education } from "./models/Education";
 
 mongoose.connect(DB_URL);
 const db = mongoose.connection;
@@ -22,6 +20,7 @@ db.on("error", (error) =>
 
 export { User };
 export { Certificate };
-export { Education };
+export { education };
 export { Project };
-export {award,Like}
+export { award, Like };
+export { education };
