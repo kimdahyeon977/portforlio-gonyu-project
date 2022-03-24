@@ -6,6 +6,8 @@ import { Education } from "./models/Education";
 import { Project } from "./models/Project";
 
 const DB_URL = process.env.MONGODB_URL; 
+import { award } from  "./models/Award"
+import { Like } from "./models/Like";
 
 
 mongoose.connect(DB_URL);
@@ -20,6 +22,6 @@ db.on("error", (error) =>
 
 export { User };
 export { Certificate };
-export { Award };
 export { Education };
 export { Project };
+export {award,Like}

@@ -6,6 +6,7 @@ import { educationRouter } from "./routers/educationRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { Awardrouter } from "./routers/awardRouter";
 import { login_required } from "./middlewares/login_required";
+import { Likerouter } from "./routers/likeRouter";
 
 import { projectRouter } from "./routers/projectRouter";
 import { login_required } from "./middlewares/login_required";
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(certificateRouter);
 app.use(educationRouter);
+app.use(Likerouter)
 app.use(login_required,Awardrouter)
 app.use(projectRouter);
 
