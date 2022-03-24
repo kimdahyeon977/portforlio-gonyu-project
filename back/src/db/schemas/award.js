@@ -14,6 +14,10 @@ const AwardSchema = new Schema(
       type: String,
       required: true,
     },
+    admissionDate: {
+      type: Date,
+      required: true,
+    },
     description: {
       type: String,
       required: true,

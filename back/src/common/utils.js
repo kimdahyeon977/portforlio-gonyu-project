@@ -9,7 +9,7 @@ util.noPermission= function(owner,requester){
         throw new Error('no Permission!')
     }
 }
-util.adminshow= function(requester){ //관리자만 볼수 있는 모든 유저의 플젝정보보기
+util.adminShow= function(requester){ //관리자만 볼수 있는 모든 유저의 플젝정보보기
     if(requester.role != 'admin'){ 
         throw new Error("no Permission!")
     }

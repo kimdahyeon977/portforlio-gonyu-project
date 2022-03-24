@@ -8,7 +8,6 @@ import { Awardrouter } from "./routers/awardRouter";
 import { login_required } from "./middlewares/login_required";
 
 import { projectRouter } from "./routers/projectRouter";
-import { login_required } from "./middlewares/login_required";
 const app = express();// CORS 에러 방지
 
 
