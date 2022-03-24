@@ -1,6 +1,8 @@
 import is from "@sindresorhus/is";
 import { Router } from "express";
 import { awardService as AwardService } from "../services/awardService";
+import { Utils } from "../common/utils";
+
 const Awardrouter = Router();
 
 Awardrouter.post("/award/create", async function (req, res, next) {  // 작동 됨
@@ -47,9 +49,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
 
-    if (req.currentUserId !== currentUserInfo.userId){
-      throw new Error("해당 아이디가 다릅니다");
-    }
+    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
     
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
@@ -93,9 +93,7 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 �
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
 
-    if (req.currentUserId !== currentUserInfo.userId){
-      throw new Error("해당 아이디가 다릅니다");
-    }
+    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
 
     
     // 위 id를 이용하여 db에서 데이터 삭제하기

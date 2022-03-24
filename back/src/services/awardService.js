@@ -5,7 +5,10 @@ class AwardService {
      async addAward({userId,title,description}) {
       
       const newAward = {userId,title,description};
-  
+      
+      if (!newAward){
+        throw new Error('입력정보 없음')
+      }
       // db에 저장
       const createdNewAward = await Award.create({ newAward });
       createdNewAward.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
