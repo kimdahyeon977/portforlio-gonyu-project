@@ -21,9 +21,6 @@ class projectService {
       throw new Error("해당 프로젝트가 없습니다. 다시 한 번 확인해 주세요.");
     }
     return project;
-    if(project){
-
-    }
 }
   async getUserInfo({ userId }) {
     const projects = await Project.findByUserId({ userId })
@@ -66,15 +63,22 @@ class projectService {
     if (toUpdate.fromDate) {
       const fieldToUpdate = "fromDate";
       const newValue = toUpdate.fromDate;
+      /*
+      if(!util.isvalid(toUpdate.fromDate)){ //isvalid func에서 return값이 없으면
+        throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
+      }
+      */
       project = await Project.update({ projectId, fieldToUpdate, newValue });
     }
     if (toUpdate.toDate) {
       const fieldToUpdate = "toDate";
       const newValue = toUpdate.toDate;
+      /*
+      if(!util.isvalid(toUpdate.toDate)){ //isvalid func에서 return값이 없으면
+        throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
+      }
+      */
       project = await Project.update({ projectId, fieldToUpdate, newValue });
-    }
-    if(!util.isvalid(toUpdate.fromDate)|| !util.isvalid(toUpdate.toDate)){ //isvalid func에서 return값이 없으면
-      throw new Error("날짜의 형식을 올바르게 입력해주세요 ex) 2017-01-01")
     }
 
     return project;

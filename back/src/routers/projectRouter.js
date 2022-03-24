@@ -1,6 +1,7 @@
 import is from "@sindresorhus/is"; //어떤 모듈인지
 import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
+import { userAuthService } from "../services/userService";
 import { login_required } from "../middlewares/login_required";
 import { util } from "../common/utils";
 const projectRouter = Router();
@@ -8,7 +9,7 @@ projectRouter.use(login_required)
 
 projectRouter.post("/project/create",
 async function (req, res, next) { //추가
-  try {
+  try {  //이런부분들도 다 빼야하는지 오피스아워
     if (is.emptyObject(req.body)) {
       throw new Error(
         "headers의 Content-Type을 application/json으로 설정해주세요"
@@ -31,7 +32,7 @@ projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
   try{
       const projectId = req.params.id;
       const project = await projectService.getProject({ projectId });
-      
+
       if(project.errorMessage){
           throw new Error(project.errorMessage);
       }
@@ -58,12 +59,16 @@ projectRouter.get(
     }
   })
 projectRouter.get(
-    "/projectlist",
+    "/projectlist",    //관리자모드에서 전체 플젝목록을 얻음
     async function (req, res, next) {
       try {
-        // 전체 플젝목록을 얻음
-        util.adminshow(req.currentUserId)//해당부분 에러발생
-        const projects = await userAuthService.getProjects();
+        //현재 로그인한 사용자 정보추출
+        const user_id = req.currentUserId;
+        const currentUserInfo = await userAuthService.getUserInfo({
+          user_id,
+        });
+        util.adminshow(currentUserInfo)//해당부분 에러발생
+        const projects = await projectService.getProjects();
         res.status(200).send(projects);
       } catch (error) {
         next(error);
@@ -77,9 +82,15 @@ projectRouter.put( //수정
   "/project/:id",
   async function (req, res, next) {
     try {
+      //현재 로그인한 사용자 정보추출
+      const user_id = req.currentUserId;
+      const currentUserInfo = await userAuthService.getUserInfo({
+        user_id,
+      });
+      //project owner정보 추출
       const projectId = req.params.id
       const permission = await projectService.getProject({projectId});
-      util.noPermission(permission, req.currentUserId)
+      util.noPermission(permission, currentUserInfo)
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 

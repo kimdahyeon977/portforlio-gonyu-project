@@ -1,11 +1,16 @@
+import jwt from "jsonwebtoken";
+const secret='elice';
 var util= {};
-util.noPermission= function(requester,owner){
-    if(requester.userId==owner || requester.role==='admin'){//실행잘됨
-        return
+util.noPermission= function(owner,requester){
+    if(owner.userId!=requester ){
+        if(requester.role =='admin'){
+            return
+        }
+        throw new Error('no Permission!')
     }
 }
-util.adminshow= function(requester){
-    if(requester.role != 'admin'){ //currentUserId읽어오지못함
+util.adminshow= function(requester){ //관리자만 볼수 있는 모든 유저의 플젝정보보기
+    if(requester.role != 'admin'){ 
         throw new Error("no Permission!")
     }
 }
@@ -13,6 +18,10 @@ util.isvalid= function(data){
     if(data != null && typeof data === 'Date'){
         return data
     }
+}
+util.setUserToken=(res,user)=>{
+    const token=jwt.sign(user,secret);
+    res.cookie('token',token)
 }
 export {util};
 
