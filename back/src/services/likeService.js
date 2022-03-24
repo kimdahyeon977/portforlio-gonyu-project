@@ -18,8 +18,9 @@ class LikeService {
         const counts = await Like.findByUserIdCount({userId})
         return counts
     }
+    
 
-}
+} 
 
 const likeService = new LikeService()
 export {likeService}
