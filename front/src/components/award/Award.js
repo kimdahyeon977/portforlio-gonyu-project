@@ -3,19 +3,19 @@ import AwardCard from "./AwardCard";
 import AwardEditForm from "./AwardEditForm";
 
 function Award({award, setAwards, isEditable}){
-    const [isInserting, setIsInserting] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
     return <>
-        {isInserting ? (
+        {isEditing ? (
             <AwardEditForm 
                 setAwards={setAwards}
-                currentAward={award}
-                setIsEditing={setIsInserting}
+                curAward={award}
+                setIsEditing={setIsEditing}
             />
         ) : (
             <AwardCard 
                 award={award}
                 isEditable={isEditable}
-                setIsInserting={setIsInserting}   
+                setIsEditing={setIsEditing}   
             />
         )}
     </>
