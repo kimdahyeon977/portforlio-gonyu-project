@@ -1,9 +1,9 @@
 import { Like } from "../db";
 
 class LikeService {
-    async addLike({userId,adminId}) {
+    async addLike({userId,companyId}) {
       
-        const newLike = {userId,adminId};
+        const newLike = {userId,companyId};
         
         if (!newLike){
           throw new Error('입력정보 없음')
@@ -18,8 +18,14 @@ class LikeService {
         const counts = await Like.findByUserIdCount({userId})
         return counts
     }
-    
-
+    async findCompanyId({userId,companyId}){
+        const unlike = await Like.findByCompanyId({userId,companyId})
+        return unlike
+    }
+    async companyUnlike({userId,companyId}){
+        const unlike = await Like.deleteByid({userId,companyId})
+        return unlike
+    }
 } 
 
 const likeService = new LikeService()

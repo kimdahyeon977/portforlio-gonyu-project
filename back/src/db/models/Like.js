@@ -7,8 +7,8 @@ class like {
       return likeUp;
     }
   
-    async findByAdminId({ adminId }) {
-      const like = await likeModel.find({ adminId });
+    async findByCompanyId({ userId,companyId }) {
+      const like = await likeModel.findOne({ userId,companyId });
       return like;
     }
   
@@ -17,8 +17,8 @@ class like {
       return likes;
     }
   
-    async deleteByid({ adminId }) {
-      const deleteLike = await likeModel.deleteOne({ adminId });
+    async deleteByid({ userId,companyId}) {
+      const deleteLike = await likeModel.deleteOne({ userId,companyId });
       return deleteLike;
     }
   }

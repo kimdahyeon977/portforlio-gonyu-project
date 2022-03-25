@@ -2,9 +2,9 @@ import { award as Award } from "../db";
 
 
 class AwardService {
-     async addAward({userId,title,description}) {
+     async addAward({userId,title,description,admissionDate}) {
       
-      const newAward = {userId,title,description};
+      const newAward = {userId,title,description,admissionDate};
       
       if (!newAward){
         throw new Error('입력정보 없음')
@@ -16,9 +16,8 @@ class AwardService {
       return createdNewAward;
     }
 
-
-   async getAwardList({ userId }) {
-      const awards = await Award.findByUserId({ userId });
+   async getAwardList({ userId,sortKey }) {
+      const awards = await Award.findByUserId({ userId,sortKey });
       return awards;
     }
 
@@ -50,6 +49,8 @@ class AwardService {
 
     return award;
   }
+
+
 
   async getAwardInfo({ awardId }) {
     const award = await Award.findById({ awardId });

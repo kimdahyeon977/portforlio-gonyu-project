@@ -6,13 +6,22 @@ class Award {
     return createdNewAward;
   }
 
+  // async findByUserId({ userId, sortKey }) {
+    // const educations = await EducationModel.find({ userId }).sort(
+    //   sortKey ? sortKey : { admissionDate: "-1" }
+    // ); //디폴트는 입학일이 최신순으로 정렬, 내림차순
+  //   return educations;
+  // }
+
   async findById({ awardId }) {
     const award = await AwardModel.findOne({ id: awardId });
     return award;
   }
 
-  async findByUserId({ userId }) {
-    const awards = await AwardModel.find({ userId });
+  async findByUserId({ userId,sortKey}) {
+    const awards = await AwardModel.find({ userId }).sort(
+      sortKey ? sortKey : { admissionDate: "-1" }
+    );
     return awards;
   }
 

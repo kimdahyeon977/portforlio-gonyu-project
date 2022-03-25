@@ -1,18 +1,15 @@
 import { Schema, model } from "mongoose";
-
 const likeSchema = new Schema(
   {
     userId: {
         type: String,
         required: true,
       },
-    adminId:{
+    companyId:{
         type:String,
         required:true,
     }
 }
 );
-
 const likeModel = model("Like",  likeSchema);
-
 export { likeModel };
