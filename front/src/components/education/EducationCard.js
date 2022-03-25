@@ -20,7 +20,7 @@ function EducationCard({ education, isEditable, setIsEditing }){
               편집
             </Button>
           </Col>
-        )}
+          )}
       </Row>
     </Card>
   )
