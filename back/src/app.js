@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 import { userAuthRouter } from "./routers/userRouter";
-import { adminAuthRouter } from "./routers/adminRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
 import { projectRouter } from "./routers/projectRouter";
 import { login_required } from "./middlewares/login_required";
@@ -22,7 +21,6 @@ app.get("/", (req, res) => {
 
 // router, service 구현 (userAuthRouter는 맨 위에 있어야 함.)
 app.use(userAuthRouter);
-app.use(adminAuthRouter);
 app.use(projectRouter);
 app.use(Likerouter)
 

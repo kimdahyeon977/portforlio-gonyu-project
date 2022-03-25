@@ -9,7 +9,7 @@ projectRouter.use(login_required)
 
 projectRouter.post("/project/create",
 async function (req, res, next) { //추가
-  try {  //이런부분들도 다 빼야하는지 오피스아워
+  try {  
     if (is.emptyObject(req.body)) {
       throw new Error(
         "headers의 Content-Type을 application/json으로 설정해주세요"
@@ -19,7 +19,9 @@ async function (req, res, next) { //추가
     const userId = req.currentUserId;
     const { title, task, fromDate, toDate } = req.body;
     const newProject = await projectService.addProject({userId, title, task, fromDate, toDate });
-
+    if( !userId || !title || !fromDate || !toDate){
+      throw new Error("필수입력값을 모두 입력해주세요.")
+      }
     if(newProject.errorMessage){
       throw new Error(newProject.errorMessage);
     }
@@ -50,7 +52,7 @@ projectRouter.get(
     try{
         const userId = req.params.id
         const sortKey=req.query;
-        const currentUserInfo = await projectService.getUserInfo({userId,sortKey});
+        const currentUserInfo = await projectService.getUserInfo({userId,sort});
         if(currentUserInfo.errorMessage){
           throw new Error(currentUserInfo.errorMessage)
       }

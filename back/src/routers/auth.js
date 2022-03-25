@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from 'passport';
 import { util } from '../common/utils';
-
 const router = Router();
 
 router.post('/', authenticate('local', { session: false }), (req, res, next) => {

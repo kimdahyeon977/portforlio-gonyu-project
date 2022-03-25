@@ -18,5 +18,8 @@ util.setUserToken=(res,user)=>{
     const token=jwt.sign(user,secret);
     res.cookie('token',token)
 }
+util.isRecruter=function(requester){
+    if(requester.role !== 'recruter'){ throw new Error('채용관계자만 좋아요를 누를수있습니다!') }
+}
 export {util};
 

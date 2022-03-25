@@ -1,13 +1,9 @@
 import { project as Project } from "../db/models/Project"; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
-import { util } from "../common/utils";
 class projectService {
   async addProject({ userId,title, task, fromDate, toDate }) { //추가
     // db에 저장
     const newProject = {  userId, title, task, fromDate, toDate }; 
     const createdNewProject = await Project.create({ newProject });
-    if( !userId || !title || !fromDate || !toDate){
-    throw new Error("필수입력값을 모두 입력해주세요.")
-    }
     createdNewProject.errorMessage = null;
     return createdNewProject;
   }

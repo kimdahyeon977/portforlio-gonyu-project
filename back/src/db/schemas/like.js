@@ -16,3 +16,4 @@ const likeSchema = new Schema(
 const likeModel = model("Like",  likeSchema);
 
 export { likeModel };
+

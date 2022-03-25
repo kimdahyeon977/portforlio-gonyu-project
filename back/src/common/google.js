@@ -1,5 +1,5 @@
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { User, OAuth } = require('../db/models/User');
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { User, OAuth } from '../db/models/User';
 
 const config = {
   clientID: '557898764993-m4919nhfs6d07uspbtianuh6ilfr60n4.apps.googleusercontent.com',// clientId 설정하기
@@ -26,7 +26,7 @@ async function findOrCreateUser({ name, email }) {
   return created;
 }
 
-module.exports = new GoogleStrategy(config, async (accessToken, refreshToken, profile, done) => {
+export default new GoogleStrategy(config, async (accessToken, refreshToken, profile, done) => {
   const { email, name } = profile._json;
 
   try {
