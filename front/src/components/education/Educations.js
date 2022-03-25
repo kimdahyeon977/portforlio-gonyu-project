@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import Education from "./Education";
 import * as Api from "../../api";
-import EducationAdd from "./EducationAdd";
+import EducationAddForm from "./EducationAddForm";
 
-function EducationLevel({ portfolioOwnerId, isEditable}) {
+function Educations({ portfolioOwnerId, isEditable}) {
 
   const [educationList, setEducationList] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -19,13 +19,15 @@ function EducationLevel({ portfolioOwnerId, isEditable}) {
       <Card.Body>
         <Card.Title>학력</Card.Title>
         {educationList.map((education) => (
-          <Education
-            key={education.id}
-            education={education}
-            isEditable={isEditable}
-            setEducationList={setEducationList}
-            />
-        ))}
+          <React.Fragment key={education.id}>
+            <Education
+              education={education}
+              isEditable={isEditable}
+              setEducationList={setEducationList}
+              />
+              <div className="mb-2"></div>
+          </React.Fragment>
+          ))}
 
         {isEditable && (
           <Row className="text-center">
@@ -35,7 +37,7 @@ function EducationLevel({ portfolioOwnerId, isEditable}) {
           </Row>
         )}
         {isAdding && (
-          <EducationAdd
+          <EducationAddForm
             portfolioOwnerId={portfolioOwnerId}
             setEducationList={setEducationList}
             setIsAdding={setIsAdding}
@@ -46,4 +48,4 @@ function EducationLevel({ portfolioOwnerId, isEditable}) {
   );
 }
 
-export default EducationLevel;
+export default Educations;
