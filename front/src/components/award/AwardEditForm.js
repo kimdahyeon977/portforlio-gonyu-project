@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import React, {useState} from "react"
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import * as API from '../../api'
 
 function AwardEditForm({setAwards, curAward, setIsEditing}){
@@ -11,16 +11,20 @@ function AwardEditForm({setAwards, curAward, setIsEditing}){
         event.preventDefault();
         event.stopPropagation();
 
-        const newAward = {
+        const edittedAward = {
             ...curAward,
             title,
             description,
         }
         try {
-            await API.put(`awards/${curAward.id}`, newAward);
-            // const res = await API.get("awardlist", curAward.user_id);
-            // TODO: setAwards로 변경된 award를 awards 반영하기
-            // setAwards(res.data)
+            await API.put(`awards/${curAward.id}`, edittedAward);
+            setAwards((prev) => {
+                const edittedList = prev.filter(item => item.id !== curAward.id)
+                return [
+                    ...edittedList,
+                    edittedAward,
+                ]
+            })
             setIsEditing(false);
 
         }catch(error){
