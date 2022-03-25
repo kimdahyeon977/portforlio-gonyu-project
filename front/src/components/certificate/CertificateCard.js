@@ -2,17 +2,17 @@ import { Card, Button, Row, Col} from "react-bootstrap";
 
 function CertificateCard({ certificate, isEditable, setIsEditing }){
   return (
-    <Card>
-      <Row className="align-items-center">
+    <Card className="px-3 py-3">
+      <Row className="align-items-center" xs="auto">
         <Col>
           <span>{certificate.title}</span>
           <br />
-          <span className="text-muted">{certificate.description}</span>
-          <br />
-          <span className="text-muted">{certificate.when_date}</span>
+          <span className="text-muted">{`${certificate.description} (${
+            certificate.when_date || ""
+          })`}</span>
         </Col>
         {isEditable && (
-          <Col lg="1">
+          <Col className="ms-auto">
             <Button
               variant="outline-info"
               onClick={() => setIsEditing((editedPage) => !editedPage )}

@@ -4,7 +4,7 @@ import { Form, Button, Col, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 
-function CertificateAdd({ portfolioOwnerId, setIsAdding, setCertificateList }) {
+function CertificateAddForm({ portfolioOwnerId, setIsAdding, setCertificateList }) {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -13,33 +13,28 @@ function CertificateAdd({ portfolioOwnerId, setIsAdding, setCertificateList }) {
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
-
     const user_id = portfolioOwnerId;
-    const when_date = moment().format("YYYY-MM-DD").split(" ");
-
-    console.log(whenDate);
-    console.log(when_date);
-
+    const when_date = moment(whenDate).format("YYYY-MM-DD");
+    // const addedCertificate = {
+    //   ...portfolioOwnerId,
+    //   title,
+    //   description,
+    //   when_date,
+    // }
     try {
       await Api.post("certificate/create", {
         user_id,
         title,
         description,
         when_date,
-      })
-    } catch (err) {
-      console.log("날짜 추가에 실패하였습니다.", err);
-    }
-    console.log(title);
-    console.log(e.target.value);
+      });
 
-    try {
       const res = await Api.get("certificatelist", user_id);
       setCertificateList(res.data);
       setIsAdding(false);
     } catch (err) {
-      console.log("날짜 출력에 실패하였습니다.", err);
-  };
+      console.log("항목 추가에 실패하였습니다.", err);
+    }
 }
 
   return (
@@ -82,4 +77,4 @@ function CertificateAdd({ portfolioOwnerId, setIsAdding, setCertificateList }) {
   )
 }
 
-export default CertificateAdd;
+export default CertificateAddForm;

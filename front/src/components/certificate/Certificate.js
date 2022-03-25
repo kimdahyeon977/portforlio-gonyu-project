@@ -1,26 +1,29 @@
-import React, { useState } from "react";
-import CertificateCard from "./CertificateCard";
-import CertificateEditForm from "./CertificateEditForm";
+import { Card, Button, Row, Col} from "react-bootstrap";
 
-function Certificate({ certificate, setCertificateList, isEditable }) {
-  const [ isEditing, setIsEditing ] = useState(false)
+function EducationCard({ education, isEditable, setIsEditing }){
   return (
-    <>
-      {isEditing ? (
-        <CertificateEditForm
-          currentCertificate={certificate}
-          setIsEditing={setIsEditing}
-          setCertificateList={setCertificateList}
-        />
-      ) : (
-        <CertificateCard
-          certificate={certificate}
-          setIsEditing={setIsEditing}
-          isEditable={isEditable}
-        />
-      )}
-    </>
-  );
+    <Card className="px-3 py-3">
+      <Row className="align-items-center" xs="auto">
+        <Col>
+          <span>{education.school}</span>
+          <br />
+          <span className="text-muted">{`${education.major} (${
+            education.position || ""
+          })`}</span>
+        </Col>
+        {isEditable && (
+          <Col className="ms-auto">
+            <Button
+              variant="outline-info"
+              onClick={() => setIsEditing((editedPage) => !editedPage )}
+            >
+              편집
+            </Button>
+          </Col>
+          )}
+      </Row>
+    </Card>
+  )
 }
 
-export default Certificate;
+export default EducationCard;

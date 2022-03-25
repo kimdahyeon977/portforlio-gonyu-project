@@ -14,27 +14,30 @@ function CertificateEditForm({ currentCertificate, setIsEditing, setCertificateL
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-    const user_id = currentCertificate.user_id;
-    const when_date = moment().format("YYYY-MM-DD").split(" ");
+    // const user_id = currentCertificate.user_id;
+    const when_date = moment(whenDate).format("YYYY-MM-DD");
+    console.log(when_date);
+
+    const editedCertificate = {
+      ...currentCertificate,
+      title,
+      description,
+      when_date,
+    };
 
     try {
-      await Api.put(`certificates/${currentCertificate.id}`, {
-        user_id,
-        title,
-        description,
-        when_date,
-      })
-    } catch (err) {
-      console.log("자격증 수정에 실패하였습니다.", err);
-    }
-
-    try {
-      const res = await Api.get("certificatelist", user_id);
-      setCertificateList(res.data);
+         await Api.put(`certificates/${currentCertificate.id}`, editedCertificate);
+      setCertificateList((prev) =>
+        prev.map((currentCertificate) =>
+          currentCertificate.id === editedCertificate.id ? editedCertificate : currentCertificate
+        )
+      );
       setIsEditing(false);
     } catch (err) {
-      console.log("자격증 가져오기에 실패하였습니다.", err);
-  };
+      // const res = await Api.get("certificatelist", user_id);
+      // setCertificateList(res.data)
+      console.log("자격증 수정에 실패하였습니다.", err);
+    }
 }
 
   return (

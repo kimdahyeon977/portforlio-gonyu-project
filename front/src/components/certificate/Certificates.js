@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import Certificate from "./Certificate";
 import * as Api from "../../api";
-import CertificateAdd from "./CertificateAdd";
+import CertificateAddForm from "./CertificateAddForm";
 
-function CertificateLevel({ portfolioOwnerId, isEditable}) {
+function Certificates({ portfolioOwnerId, isEditable}) {
 
   const [certificateList, setCertificateList] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -20,12 +20,14 @@ function CertificateLevel({ portfolioOwnerId, isEditable}) {
       <Card.Body>
         <Card.Title>자격증</Card.Title>
         {certificateList.map((certificate) => (
-          <Certificate
-            key={certificate.id}
-            certificate={certificate}
-            isEditable={isEditable}
-            setCertificateList={setCertificateList}
-            />
+          <React.Fragment key={certificate.id}>
+            <Certificate
+              certificate={certificate}
+              isEditable={isEditable}
+              setCertificateList={setCertificateList}
+              />
+            <div className="mb-2"></div>
+          </React.Fragment>
         ))}
 
         {isEditable && (
@@ -36,7 +38,7 @@ function CertificateLevel({ portfolioOwnerId, isEditable}) {
           </Row>
         )}
         {isAdding && (
-          <CertificateAdd
+          <CertificateAddForm
             portfolioOwnerId={portfolioOwnerId}
             setCertificateList={setCertificateList}
             setIsAdding={setIsAdding}
@@ -47,4 +49,4 @@ function CertificateLevel({ portfolioOwnerId, isEditable}) {
   );
 }
 
-export default CertificateLevel;
+export default Certificates;
