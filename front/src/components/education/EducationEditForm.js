@@ -2,35 +2,34 @@ import React, { useState } from "react";
 import * as Api from "../../api";
 import { Button, Form, Col, Row } from "react-bootstrap";
 
-function EducationEditForm({ educationLevel, setIsEditing, setEducationList }) {
-  const [school, setSchool] = useState(educationLevel.school);
-  const [major, setMajor] = useState(educationLevel.major);
-  const [position, setPosition] = useState(educationLevel.position);
+function EducationEditForm({ education, setIsEditing, setEducationList }) {
+  const [school, setSchool] = useState(education.school);
+  const [major, setMajor] = useState(education.major);
+  const [position, setPosition] = useState(education.position);
 
   const handleSubmit= async (e) => {
     e.preventDefault();
 
-    const user_id = educationLevel.user_id;
+    const editedEducation = {
+      ...education,
+      school,
+      major,
+      position,
+    };
 
     // 학력 수정
     try {
-      await Api.put(`educations/${educationLevel.id}`, {
-        user_id,
-        school,
-        major,
-        position,
-      })
+      await Api.put(`educations/${education.id}`, editedEducation);
+      setEducationList((prev) =>
+        prev.map((education) =>
+          education.id === editedEducation.id ? editedEducation : education
+        )
+      );
+      setIsEditing(false);
     } catch (err) {
       console.log("항목 수정에 실패하였습니다.", err);
     }
 
-    try {
-      const res = await Api.get("educationlist", user_id);
-      setEducationList(res.data);
-      setIsEditing(false);
-    } catch (err) {
-      console.log("항목 갖고오기에 실패하였습니다.", err);
-    }
   };
 
   return (
@@ -55,46 +54,23 @@ function EducationEditForm({ educationLevel, setIsEditing, setEducationList }) {
           />
       </Form.Group>
 
-  {['radio'].map((type) => (
-    <div key={`inline-${type}`} className="mb-3">
-      <Form.Check
-        inline
-        value="재학 중"  // 제어 컴포넌트에서 value prop 을 지정하면 사용자가 input 의 value 를 변경할 수 없도록함.
-        label="재학 중"
-        name="position"
-        type={type}
-        id={`inline-${type}-1`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
-      <Form.Check
-        inline
-        value="학사 졸업"
-        label="학사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-2`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
-      <Form.Check
-        inline
-        value="석사 졸업"
-        label="석사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-3`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
-      <Form.Check
-        inline
-        value="박사 졸업"
-        label="박사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-4`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
+    <div key={'inline-radio'} className="mb-3">
+      {['재학 중', '학사 졸업', '석사 졸업' , '박사 졸업'].map(
+        (option, id) => (
+        <Form.Check
+          inline
+          key={option}
+          value={option}
+          label={option}
+          name={'position'}
+          type={'radio'}
+          id={`inline-radio-${id+1}`}
+          checked={position === option}
+          onChange={() => setPosition(option)}
+        />
+          )
+        )}
     </div>
-  ))}
 
   <Row>
     <Col>

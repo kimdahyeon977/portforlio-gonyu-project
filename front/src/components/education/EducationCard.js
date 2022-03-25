@@ -2,8 +2,8 @@ import { Card, Button, Row, Col} from "react-bootstrap";
 
 function EducationCard({ education, isEditable, setIsEditing }){
   return (
-    <Card>
-      <Row className="align-items-center">
+    <Card className="px-3 py-3">
+      <Row className="align-items-center" xs="auto">
         <Col>
           <span>{education.school}</span>
           <br />
@@ -12,7 +12,7 @@ function EducationCard({ education, isEditable, setIsEditing }){
           })`}</span>
         </Col>
         {isEditable && (
-          <Col lg="1">
+          <Col className="ms-auto">
             <Button
               variant="outline-info"
               onClick={() => setIsEditing((editedPage) => !editedPage )}
@@ -20,7 +20,7 @@ function EducationCard({ education, isEditable, setIsEditing }){
               편집
             </Button>
           </Col>
-        )}
+          )}
       </Row>
     </Card>
   )
