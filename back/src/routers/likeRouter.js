@@ -68,6 +68,7 @@ Likerouter.get("/likecount/:userId", async function (req, res, next) {
     const { userId } = req.params;
     const counts = await likeService.likeCount({ userId });
 
+<<<<<<< HEAD
     res.status(200).json(counts);
   } catch (error) {
     next(error);
@@ -75,3 +76,6 @@ Likerouter.get("/likecount/:userId", async function (req, res, next) {
 });
 
 export { Likerouter };
+=======
+export {Likerouter}
+>>>>>>> awardMVP_BE
