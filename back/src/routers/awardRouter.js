@@ -4,11 +4,10 @@ import { awardService as AwardService } from "../services/awardService";
 import { login_required } from "../middlewares/login_required";
 import { utils } from "../common/utils";
 
+const AwardRouter = Router();
+AwardRouter.use(login_required);
 
-const Awardrouter = Router();
-Awardrouter.use(login_required);
-
-Awardrouter.post("/award/create", async function (req, res, next) {
+AwardRouter.post("/award/create", async function (req, res, next) {
   // 작동 됨
   try {
     if (is.emptyObject(req.body)) {
@@ -36,32 +35,32 @@ Awardrouter.post("/award/create", async function (req, res, next) {
   }
 });
 
-Awardrouter.get("/awardlist/:userId/:sortKey?", async function (req, res, next) { // 작동됨
-  try {
-    const userId = req.params.userId;
-    const sortKey = req.query;
-    const awardList = await AwardService.getAwardList({ userId,sortKey });
-    res.status(200).send(awardList);
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-
-Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨 
+AwardRouter.get(
+  "/awardlist/:userId/:sortKey?",
+  async function (req, res, next) {
+    // 작동됨
     try {
-      //현재 로그인한 사용자 정보추출
-      const user_id = req.currentUserId;
-      const currentLoginUserInfo = await userAuthService.getUserInfo({
-        user_id,
-      });
-      const awardId = req.params.id;
-      const permission = await AwardService.getAwardInfo({awardId});
-      utils.noPermission(permission, currentLoginUserInfo)
+      const userId = req.params.userId;
+      const sortKey = req.query;
+      const awardList = await AwardService.getAwardList({ userId, sortKey });
+      res.status(200).send(awardList);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-
-    
+AwardRouter.put("/awards/:id", async function (req, res, next) {
+  // 작동 됨
+  try {
+    //현재 로그인한 사용자 정보추출
+    const userId = req.currentUserId;
+    const currentLoginUserInfo = await userAuthService.getUserInfo({
+      userId,
+    });
+    const awardId = req.params.id;
+    const permission = await AwardService.getAwardInfo({ awardId });
+    utils.noPermission(permission, currentLoginUserInfo);
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
@@ -82,7 +81,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
   }
 });
 
-Awardrouter.get("/awards/:id", async function (req, res, next) {
+AwardRouter.get("/awards/:id", async function (req, res, next) {
   // 작동
   try {
     const awardId = req.params.id;
@@ -98,13 +97,13 @@ Awardrouter.get("/awards/:id", async function (req, res, next) {
   }
 });
 
-Awardrouter.delete("/awards/:id", async function (req, res, next) {
+AwardRouter.delete("/awards/:id", async function (req, res, next) {
   // 동작 확인
   try {
     const awardId = req.params.id;
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
-    utils.noPermission(currentUserInfo.userId, req.currentUserId)
+    utils.noPermission(currentUserInfo.userId, req.currentUserId);
 
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await AwardService.deleteAward({ awardId });
@@ -113,10 +112,10 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {
       throw new Error(result.errorMessage);
     }
 
-    res.json('삭제완료')
+    res.json("삭제완료");
   } catch (error) {
     next(error);
   }
 });
 
-export { Awardrouter };
+export { AwardRouter };
