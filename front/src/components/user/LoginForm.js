@@ -1,11 +1,14 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
-
+import { GoogleLogin } from 'react-google-login';
 import * as Api from "../../api";
 import { DispatchContext } from "../../App";
 
 function LoginForm() {
+  const responseGoogle = (response) => {
+    console.log(response);
+  }
   const navigate = useNavigate();
   const dispatch = useContext(DispatchContext);
 
@@ -101,6 +104,13 @@ function LoginForm() {
                 </Button>
               </Col>
             </Form.Group>
+            <GoogleLogin
+              clientId="557898764993-m4919nhfs6d07uspbtianuh6ilfr60n4.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+            />
 
             <Form.Group as={Row} className="mt-3 text-center">
               <Col sm={{ span: 20 }}>

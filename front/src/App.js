@@ -6,9 +6,11 @@ import { loginReducer } from "./reducer";
 
 import Header from "./components/Header";
 import LoginForm from "./components/user/LoginForm";
+import GoogleLogin from "./components/user/Google";
 import Network from "./components/user/Network";
 import RegisterForm from "./components/user/RegisterForm";
 import Portfolio from "./components/Portfolio";
+
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -59,6 +61,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" exact element={<Portfolio />} />
+            <Route path="/google" exact element={<GoogleLogin />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/users/:userId" element={<Portfolio />} />
