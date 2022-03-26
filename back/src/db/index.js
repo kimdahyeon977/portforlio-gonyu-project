@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "./models/User";
-import { certificate } from "./models/Certificate";
+import { USER } from "./models/User";
+import { Certificate } from "./models/Certificate";
 import { Project } from "./models/Project";
 import { award } from "./models/Award";
 import { Like } from "./models/Like";
@@ -20,8 +20,8 @@ db.on("error", (error) =>
   console.error("MongoDB 연결에 실패하였습니다...\n" + DB_URL + "\n" + error)
 );
 
-export { User };
-export { certificate };
+export { USER };
+export { Certificate };
 export { education };
 export { Project };
 export { award };

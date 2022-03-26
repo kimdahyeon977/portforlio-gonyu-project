@@ -92,7 +92,7 @@ userAuthRouter.put(
     try {
       // URI로부터 사용자 id를 추출함.
       const userId = req.params.id;
-      const user = await userAuthService.getUser({
+      const user = await userAuthService.getUserInfo({
         userId,
       });
 
@@ -127,7 +127,7 @@ userAuthRouter.delete(
     try {
       // req (request) 에서 id 가져오기
       const userId = req.params.id;
-      const user = await userAuthService.getUser({
+      const user = await userAuthService.getUserInfo({
         userId,
       });
 

@@ -1,11 +1,21 @@
 import {Button, Card, Col, Row} from "react-bootstrap"
 
-function AwardCard({award, isEditable, setIsEditing}){
+function ProjectCard({curProject, isEditable, setIsEditing}){
     return <Card.Text>
         <Row>
             <Col>
-                <div>{award.title}</div>
-                <div>{award.description}</div>
+                <div>{curProject.title}</div>
+                <div>{curProject.description}</div>
+                <div>
+                    <span>
+                        from
+                        {curProject.fromDate}
+                    </span>
+                    <span>
+                        to
+                        {curProject.toDate}
+                    </span>
+                </div>
             </Col>
             {
                 isEditable && (
@@ -24,4 +34,4 @@ function AwardCard({award, isEditable, setIsEditing}){
     </Card.Text>
 }
 
-export default AwardCard;
+export default ProjectCard;

@@ -1,8 +1,9 @@
 import is from "@sindresorhus/is";
 import { Router } from "express";
 import { awardService as AwardService } from "../services/awardService";
-import { Utils } from "../common/utils";
 import { login_required } from "../middlewares/login_required";
+import { utils } from "../common/utils";
+
 
 const Awardrouter = Router();
 Awardrouter.use(login_required);
@@ -35,26 +36,32 @@ Awardrouter.post("/award/create", async function (req, res, next) {
   }
 });
 
-Awardrouter.get("/awardlist/:userId", async function (req, res, next) {
-  // 작동됨
+Awardrouter.get("/awardlist/:userId/:sortKey?", async function (req, res, next) { // 작동됨
   try {
     const userId = req.params.userId;
-    const awardList = await AwardService.getAwardList({ userId });
+    const sortKey = req.query;
+    const awardList = await AwardService.getAwardList({ userId,sortKey });
     res.status(200).send(awardList);
   } catch (error) {
     next(error);
   }
 });
 
-Awardrouter.put("/awards/:id", async function (req, res, next) {
-  // 작동 됨
-  try {
-    // URI로부터 수상 데이터 id를 추출함.
-    const awardId = req.params.id;
 
-    const currentUserInfo = await AwardService.getAwardInfo({ awardId });
 
-    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
+Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨 
+    try {
+      //현재 로그인한 사용자 정보추출
+      const user_id = req.currentUserId;
+      const currentLoginUserInfo = await userAuthService.getUserInfo({
+        user_id,
+      });
+      const awardId = req.params.id;
+      const permission = await AwardService.getAwardInfo({awardId});
+      utils.noPermission(permission, currentLoginUserInfo)
+
+
+    
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
@@ -97,8 +104,7 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {
     const awardId = req.params.id;
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
-
-    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
+    utils.noPermission(currentUserInfo.userId, req.currentUserId)
 
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await AwardService.deleteAward({ awardId });
@@ -107,7 +113,7 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {
       throw new Error(result.errorMessage);
     }
 
-    res.ok();
+    res.json('삭제완료')
   } catch (error) {
     next(error);
   }

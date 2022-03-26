@@ -1,4 +1,3 @@
-import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 function login_required(req, res, next) {
