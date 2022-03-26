@@ -1,7 +1,7 @@
 import is from "@sindresorhus/is";
 import { Router } from "express";
 import { awardService as AwardService } from "../services/awardService";
-import { Utils } from "../common/utils";
+import { utils } from "../common/utils";
 import { userAuthService } from "../services/userService";
 
 const Awardrouter = Router();
@@ -64,7 +64,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
       });
       const awardId = req.params.id;
       const permission = await AwardService.getAwardInfo({awardId});
-      Utils.noPermission(permission, currentLoginUserInfo)
+      utils.noPermission(permission, currentLoginUserInfo)
 
 
     // URI로부터 수상 데이터 id를 추출함.
@@ -72,7 +72,7 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
 
-    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
+    utils.editPermission(currentUserInfo.userId, req.currentUserId);
     
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
@@ -118,8 +118,8 @@ Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 �
     const awardId = req.params.id
 
     const currentUserInfo = await AwardService.getAwardInfo({ awardId });
-    Utils.noPermission(currentUserInfo.userId, req.currentUserId)
-    Utils.editPermission(currentUserInfo.userId, req.currentUserId);
+    utils.noPermission(currentUserInfo.userId, req.currentUserId)
+    utils.editPermission(currentUserInfo.userId, req.currentUserId);
 
     
     // 위 id를 이용하여 db에서 데이터 삭제하기
