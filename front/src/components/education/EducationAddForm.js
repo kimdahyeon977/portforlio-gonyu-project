@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as Api from "../../api";
 import { Form, Button, Col, Row } from "react-bootstrap";
 
-function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
+function EducationAddForm({ portfolioOwnerId, setIsAdding, setEducationList }) {
 
   const [school, setSchool] = useState("");
   const [major, setMajor] = useState("");
@@ -11,7 +11,6 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
-
     const user_id = portfolioOwnerId;
 
     try {
@@ -26,7 +25,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
     }
 
     try {
-      const res = await Api.get("education", user_id);
+      const res = await Api.get("educationlist", user_id);
       setEducationList(res.data);
       setIsAdding(false);
     } catch (err) {
@@ -56,53 +55,29 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
           />
       </Form.Group>
 
-  {['radio'].map((type) => (
-    <div key={`inline-${type}`} className="mb-3">
+    <div key={'inline-radio'} className="mb-3">
+      {['재학 중', '학사 졸업', '석사 졸업', '박사 졸업'].map(
+        (option, id) => (
       <Form.Check
         inline
-        value="재학 중"  // 제어 컴포넌트에서 value prop 을 지정하면 사용자가 input 의 value 를 변경할 수 없도록함.
-        label="재학 중"
-        name="position"
-        type={type}
-        id={`inline-${type}-1`}
-        onChange={(e) => setPosition(e.target.value)}
+        value={option}  // 제어 컴포넌트에서 value prop 을 지정하면 사용자가 input 의 value 를 변경할 수 없도록함.
+        label={option}
+        name={'position'}
+        type={'radio'}
+        id={`inline-radio-${id + 1}`}
+        onChange={() => setPosition(option)}
+        key={option}
       />
-      <Form.Check
-        inline
-        value="학사 졸업"
-        label="학사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-2`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
-      <Form.Check
-        inline
-        value="석사 졸업"
-        label="석사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-3`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
-      <Form.Check
-        inline
-        value="박사 졸업"
-        label="박사 졸업"
-        name="position"
-        type={type}
-        id={`inline-${type}-4`}
-        onChange={(e) => setPosition(e.target.value)}
-      />
+      )
+      )}
     </div>
-  ))}
 
   <Row>
     <Col>
       <Button variant="primary" type="submit" className="me-3">
         확인
       </Button>
-      <Button variant="secondary" type="submit" onClick={() => setIsAdding(false)}>
+      <Button variant="secondary" onClick={() => setIsAdding(false)}>
         취소
       </Button>
     </Col>
@@ -111,4 +86,4 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
   )
 }
 
-export default EducationAdd;
+export default EducationAddForm;

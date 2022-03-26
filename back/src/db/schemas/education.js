@@ -1,12 +1,9 @@
 import { Schema, model } from "mongoose";
-
+const id = require("./types/id.js");
 const EducationSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
-    user_id: {
+    id,
+    userId: {
       type: String,
       required: true,
     },
@@ -24,6 +21,15 @@ const EducationSchema = new Schema(
       //재학중, 휴학중, 졸업, 졸업예정 등을 나타냄
       type: String,
       required: true,
+    },
+    admissionDate: {
+      type: Date,
+      required: true,
+    },
+    graduationDate: {
+      //position에 따라 달라지니 필수 값이 아닐 수 있다.
+      type: Date,
+      required: false,
     },
   },
   {

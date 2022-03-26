@@ -1,24 +1,25 @@
 import { Card, Button, Row, Col} from "react-bootstrap";
 import * as Api from "../../api";
 
-function EducationCard({ education, isEditable, setIsEditing, setEducationList }){
+function CertificateCard({ certificate, isEditable, setIsEditing, setCertificateList }){
 
   const handleDeleteSubmit = async(e) => {
     e.preventDefault();
 
-    await Api.delete("educations", education.id);
-    setEducationList((current) => {
-      return current.filter((userEdu) => userEdu.id !== education.id)
+    await Api.delete("certificates", certificate.id);
+    setCertificateList((current) => {
+      return current.filter((userCertificate) => userCertificate.id !== certificate.id)
   })
 }
+
   return (
     <Card className="px-3 py-3">
       <Row className="align-items-center" xs="auto">
         <Col>
-          <span>{education.school}</span>
+          <span>{certificate.title}</span>
           <br />
-          <span className="text-muted">{`${education.major} (${
-            education.position || ""
+          <span className="text-muted">{`${certificate.description} (${
+            certificate.when_date || ""
           })`}</span>
         </Col>
         {isEditable && (
@@ -37,10 +38,10 @@ function EducationCard({ education, isEditable, setIsEditing, setEducationList }
               삭제
             </Button>
           </Col>
-          )}
+        )}
       </Row>
     </Card>
   )
 }
 
-export default EducationCard;
+export default CertificateCard;

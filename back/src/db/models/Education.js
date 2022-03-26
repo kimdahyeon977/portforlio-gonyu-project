@@ -1,21 +1,23 @@
 import { EducationModel } from "../schemas/education";
 
 class Education {
-  static async create({ newEducation }) {
+  async create({ newEducation }) {
     const createdNewEducation = await EducationModel.create(newEducation);
     return createdNewEducation;
   }
-  static async findById({ educationId }) {
+  async findById({ educationId }) {
     const education = await EducationModel.findOne({ id: educationId });
     return education;
   }
 
-  static async findByUserId({ user_id }) {
-    const educations = await EducationModel.find({ user_id });
+  async findByUserId({ userId, sortKey }) {
+    const educations = await EducationModel.find({ userId }).sort(
+      sortKey ? sortKey : { admissionDate: "-1" }
+    ); //디폴트는 입학일이 최신순으로 정렬, 내림차순
     return educations;
   }
 
-  static async update({ educationId, fieldToUpdate, newValue }) {
+  async update({ educationId, fieldToUpdate, newValue }) {
     const filter = { id: educationId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
@@ -28,11 +30,12 @@ class Education {
     return updatedEducation;
   }
 
-  static async deleteById({ educationId }) {
+  async deleteById({ educationId }) {
     const deleteResult = await EducationModel.deleteOne({ id: educationId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
   }
 }
 
-export { Education };
+const education = new Education();
+export { education };

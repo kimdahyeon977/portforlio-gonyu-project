@@ -4,11 +4,12 @@ import EducationEditForm from "./EducationEditForm";
 
 function Education({ education, setEducationList, isEditable }) {
   const [ isEditing, setIsEditing ] = useState(false)
+
   return (
     <>
       {isEditing ? (
         <EducationEditForm
-          educationLevel={education}
+          education={education}
           setIsEditing={setIsEditing}
           setEducationList={setEducationList}
         />
@@ -17,6 +18,7 @@ function Education({ education, setEducationList, isEditable }) {
           education={education}
           setIsEditing={setIsEditing}
           isEditable={isEditable}
+          setEducationList={setEducationList}
         />
       )}
     </>

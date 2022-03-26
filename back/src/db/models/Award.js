@@ -1,13 +1,13 @@
 import { AwardModel } from "../schemas/award";
 
 class Award {
-  static async create({ newAward }) {
+  async create({ newAward }) {
     const createdNewAward = await AwardModel.create(newAward);
     return createdNewAward;
   }
 
-  static async findById({ award_Id }) {
-    const award = await AwardModel.findOne({ id: award_Id });
+  async findById({ awardId }) {
+    const award = await AwardModel.findOne({ id: awardId });
     return award;
   }
 
@@ -18,8 +18,8 @@ class Award {
     return educations;
   }
 
-  static async update({ award_Id, fieldToUpdate, newValue }) {
-    const filter = { id: award_Id };
+  async update({ awardId, fieldToUpdate, newValue }) {
+    const filter = { id: awardId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
@@ -31,9 +31,10 @@ class Award {
     return updatedAward;
   }
 
-  static async deleteByid({ award_Id }) {
-    const deleteAward = await AwardModel.deleteOne({ id: award_Id });
+  async deleteByid({ awardId }) {
+    const deleteAward = await AwardModel.deleteOne({ id: awardId });
     return deleteAward;
   }
 }
-export { Award };
+const award =  new Award()
+export { award };
