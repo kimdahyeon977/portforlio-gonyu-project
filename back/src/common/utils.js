@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-const secret = "elice";
 var util = {};
 util.noPermission = function (owner, requester) {
   if (owner.userId != requester.id) {
