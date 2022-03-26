@@ -44,5 +44,5 @@ class User {
   }
 }
 
-const user = new User();
-export { user };
+const USER = new User();
+export { USER };
