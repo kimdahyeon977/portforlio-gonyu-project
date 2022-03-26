@@ -4,7 +4,7 @@ class LikeService {
   async addLike({ userId, companyId }) {
     const newLike = { userId, companyId };
 
-    if (!newLike) {
+    if (!userId || !companyId) {
       throw new Error("입력정보 없음");
     }
     // db에 저장
@@ -22,7 +22,7 @@ class LikeService {
     return unlike;
   }
   async companyUnlike({ userId, companyId }) {
-    const unlike = await Like.deleteByid({ userId, companyId });
+    const unlike = await Like.deleteById({ userId, companyId });
     return unlike;
   }
 }

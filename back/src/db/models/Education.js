@@ -5,7 +5,7 @@ class Education {
     const createdNewEducation = await EducationModel.create(newEducation);
     return createdNewEducation;
   }
-  async findById({ educationId }) {
+  async findById( educationId ) {
     const education = await EducationModel.findOne({ id: educationId });
     return education;
   }
@@ -30,7 +30,7 @@ class Education {
     return updatedEducation;
   }
 
-  async deleteById({ educationId }) {
+  async deleteById( educationId ) {
     const deleteResult = await EducationModel.deleteOne({ id: educationId });
     const isDataDeleted = deleteResult.deletedCount === 1;
     return isDataDeleted;
@@ -38,4 +38,4 @@ class Education {
 }
 
 const education = new Education();
-export { education };
+export {education };

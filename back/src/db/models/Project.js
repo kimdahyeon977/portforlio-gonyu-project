@@ -33,7 +33,7 @@ class Project {
     return projects;
   }
   async deleteById({projectId}){ //삭제
-    const deletedProject= await ProjectModel.find({id : projectId})
+    const deletedProject= await ProjectModel.deleteOne({id : projectId})
     return deletedProject
   }
 }

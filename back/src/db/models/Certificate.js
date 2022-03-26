@@ -6,9 +6,9 @@ class Certificate {
     return createdNewCertificate;
   }
 
-  async findById({ certificateId }) {
-    const certificate = await CertificateModel.findOne({ id: certificateId });
-    return certificate;
+  async findById( certificateId ) {
+    const Certificate = await CertificateModel.findOne({ id: certificateId });
+    return Certificate;
   }
 
   async findByUserId({ userId, sortKey }) {
@@ -31,7 +31,7 @@ class Certificate {
     return updatedCertificate;
   }
 
-  async deleteById({ certificateId }) {
+  async deleteById(certificateId ) {
     const deleteResult = await CertificateModel.deleteOne({
       id: certificateId,
     });

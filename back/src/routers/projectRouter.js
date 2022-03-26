@@ -27,7 +27,7 @@ async function (req, res, next) { //추가
     next(error);
   }
 });
-projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
+projectRouter.get('/projects/:id', async (req, res, next) => { //플젝 조회
   try{
       const projectId = req.params.id;
       const project = await projectService.getProject({ projectId });
@@ -43,10 +43,13 @@ projectRouter.get(
   "/projectlist/:id/:sortKey?",
   async(req,res,next)=>{ //유저아이디로 조회
     try{
-        const userId = req.params.id
-        const sortKey=req.query;
-        const currentUserInfo = await projectService.getUserInfo({userId,sort});
-        res.status(200).send(currentUserInfo)
+      const userId = req.params.id;
+      const sortKey = req.params.sortKey;
+      const projectList = await projectService.getUserInfo({
+        userId,
+        sortKey
+      });
+        res.status(200).send(projectList)
     }catch(err){
       next(err);
     }
@@ -60,7 +63,7 @@ projectRouter.get(
         const currentUserInfo = await userAuthService.getUserInfo({
           user_id,
         });
-        util.adminshow(currentUserInfo)//해당부분 에러발생
+        util.isAdmin(currentUserInfo.role)
         const projects = await projectService.getProjects();
         res.status(200).send(projects);
       } catch (error) {
@@ -72,18 +75,19 @@ projectRouter.get(
   
 
 projectRouter.put( //수정
-  "/project/:id",
+  "/projects/:id",
   async function (req, res, next) {
     try {
       //현재 로그인한 사용자 정보추출
-      const user_id = req.currentUserId;
-      const currentUserInfo = await userAuthService.getUserInfo({
+    const user_id = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
         user_id,
       });
+
       //project owner정보 추출
-      const projectId = req.params.id
-      const permission = await projectService.getProject({projectId});
-      util.noPermission(permission, currentUserInfo)
+    const projectId = req.params.id
+    const ownerId = await projectService.getProject({ projectId })
+    util.hasPermission(ownerId.userId, currentUserInfo);
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 
@@ -98,14 +102,20 @@ projectRouter.put( //수정
   }
 );
 
-projectRouter.delete("/project/:id",  //삭제
+projectRouter.delete("/projects/:id",  //삭제
 async (req, res, next) => {
   try{
+    const user_id = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+        user_id,
+      });
+
+      //project owner정보 추출
     const projectId = req.params.id
-      const permission = await projectService.getProject({projectId});
-    util.noPermission(permission.userId, req.currentUserId)
-    const deletedProject= await projectService.deleteProject({ projectId });
-    res.send("ok")
+    const ownerId = await projectService.getProject({ projectId });
+    util.hasPermission(ownerId.userId, currentUserInfo);
+    const result= await projectService.deleteProject({ projectId });
+    res.json(result);
   }catch (error){
     next(error);
   }

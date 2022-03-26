@@ -79,6 +79,6 @@ class projectService {
   };
 }
 //싱글톤 사용해보기
-let projectservice=new projectService();
+const projectservice=new projectService();
 export { projectservice };
 
