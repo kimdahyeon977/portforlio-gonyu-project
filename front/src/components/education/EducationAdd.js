@@ -12,11 +12,11 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-    const user_id = portfolioOwnerId;
+    const userId = portfolioOwnerId;
 
     try {
       await Api.post("education/create", {
-        user_id,
+        userId,
         school,
         major,
         position,
@@ -26,7 +26,7 @@ function EducationAdd({ portfolioOwnerId, setIsAdding, setEducationList }) {
     }
 
     try {
-      const res = await Api.get("education", user_id);
+      const res = await Api.get("education", userId);
       setEducationList(res.data);
       setIsAdding(false);
     } catch (err) {

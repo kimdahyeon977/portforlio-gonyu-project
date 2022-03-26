@@ -15,7 +15,7 @@ function Project({ curProject, setProjectList, isEditable }) {
             />
         ) : (
             <ProjectCard
-                project={curProject}
+                curProject={curProject}
                 setIsEditting={setIsEditting}
                 isEditable={isEditable}
             />

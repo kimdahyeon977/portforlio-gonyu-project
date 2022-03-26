@@ -10,12 +10,12 @@ function EducationEditForm({ eudcationLevel, setIsEditing, setEducationList }) {
   const handleSubmit= async (e) => {
     e.preventDefault();
 
-    const user_id = eudcationLevel.user_id;
+    const userId = eudcationLevel.userId;
 
     // 학력 수정
     try {
       await Api.put(`educations/${eudcationLevel.id}`, {
-        user_id,
+        userId,
         school,
         major,
         position,
@@ -25,7 +25,7 @@ function EducationEditForm({ eudcationLevel, setIsEditing, setEducationList }) {
     }
 
     try {
-      const res = await Api.get("educationlist", user_id);
+      const res = await Api.get("educationlist", userId);
       setEducationList(res.data);
       setIsEditing(false);
     } catch (err) {

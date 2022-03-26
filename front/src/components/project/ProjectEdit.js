@@ -1,22 +1,31 @@
 import React, { useState } from "react"
-import {Row, Col, Form, Button} from "react-bootstrap"
-
-import * as API from "../../api"
+import {Button, Row, Col, Form} from "react-bootstrap"
 import DatePicker from "react-datepicker"
+import * as API from "../../api"
 
-function ProjectInserting({ownerId, setProjectList, setIsInserting}){
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
+function ProjectEdit({curProject, setProjectList, setIsEditting}){
+    const [title, setTitle] = useState(curProject.title);
+    const [description, setDescription] = useState(curProject.description);
+    const [fromDate, setFromDate] = useState(curProject.fromDate);
+    const [toDate, setToDate] = useState(curProject.toDate);
 
-    const submitHandler = async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+    const submitHandler = async () => {
+        const edittedProject = {
+            ...curProject,
+            title,
+            description,
+            fromDate,
+            toDate,
+        }
 
-        const res = await API.get("projectlist", ownerId);
-        setProjectList(res.data);
-        setIsInserting(false);
+        await API.put(`project/${curProject.id}`, edittedProject);
+        setProjectList((prev) => {
+            const prevData = prev.filter((item) => item.id !== curProject.id)
+            return [
+                ...prevData,
+                edittedProject,
+            ]
+        })
     }
 
     return (
@@ -63,7 +72,7 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
                 <Row>
                     <Col className="text-center mt-3">
                         <Button type="submit" variant="primary">내 삽질 기록 추가하기</Button>
-                        <Button variant="danger" onClick={() => setIsInserting(false)}>취소</Button>
+                        <Button variant="danger" onClick={() => setIsEditting(false)}>취소</Button>
                     </Col>
                 </Row>
             </Form.Group>
@@ -71,4 +80,4 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
     )
 }
 
-export default ProjectInserting;
+export default ProjectEdit;
