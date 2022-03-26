@@ -2,10 +2,12 @@ import { Button } from "react-bootstrap";
 import React, {useState} from "react"
 import { Col, Form } from "react-bootstrap";
 import * as API from '../../api'
+import DatePicker from "react-datepicker"
 
 function AwardEditForm({setAwards, curAward, setIsEditing}){
     const [title, setTitle] = useState(curAward.title);
     const [description, setDescription] = useState(curAward.description)
+    const [getDate, setGetDate] = useState(curAward.getDate)
 
     const submitHandler = async (event) => {
         event.preventDefault();
@@ -15,6 +17,7 @@ function AwardEditForm({setAwards, curAward, setIsEditing}){
             ...curAward,
             title,
             description,
+            getDate,
         }
         try {
             await API.put(`awards/${curAward.id}`, edittedAward);
@@ -49,6 +52,14 @@ function AwardEditForm({setAwards, curAward, setIsEditing}){
                     value={description}
                     placeholder="받으신 상에 대해 소개해주세요"
                 />
+                <Form.Label>수상날짜</Form.Label>
+                <DatePicker
+                    wrapperClassName="datePicker"
+                    dateFormat={"MM/dd eee, yy"}
+                    selected={getDate}
+                    onChange={(getDate)=>setGetDate(getDate)}
+                >
+                </DatePicker>
             </Form.Group>
             <Form.Group>
                 <Col className="text-center">

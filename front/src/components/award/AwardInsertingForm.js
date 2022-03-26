@@ -16,6 +16,7 @@ function AwardInsertingForm({setIsInserting, ownerId, setAwards}){
             user_id : ownerId,
             title,
             description,
+            getDate,
         })
 
         const res = await API.get("awardlist", ownerId)
@@ -44,6 +45,14 @@ function AwardInsertingForm({setIsInserting, ownerId, setAwards}){
                     placeholder="뭐에 대한 상인가요?"
                     onChange={(event) => setDescription(event.target.value)}
                 />
+                <Form.Label>수상날짜</Form.Label>
+                <DatePicker
+                    wrapperClassName="datePicker"
+                    dateFormat={"MM/dd eee, yy"}
+                    selected={getDate}
+                    onChange={(getDate)=>setGetDate(getDate)}
+                >
+                </DatePicker>
             </Form.Group>
             
             <Form.Group className="text-center">
