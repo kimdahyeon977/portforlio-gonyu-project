@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import * as API from "../../api"
+import DatePicker from "react-datepicker"
 
 function AwardInsertingForm({setIsInserting, ownerId, setAwards}){
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [getDate, setGetDate] = useState(new Date());
 
     const submitHandler = async(event) => {
         event.preventDefault();
