@@ -2,15 +2,16 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Col, Row } from "react-bootstrap";
 
-import { UserStateContext } from "../App";
+import { UserStateContext, DarkModeContext } from "../App";
 import * as Api from "../api";
 import User from "./user/User";
 import Certificates from "./certificate/Certificates";
 import Awards from "./award/Awards";
 import Educations from "./education/Educations";
-import ProjectList from "./project/ProjectList";
+import ProjectList from "./project/ProjectList"
 
 function Portfolio() {
+  const {isDarkMode} = useContext(DarkModeContext)
   const navigate = useNavigate();
   const params = useParams();
   // useState 훅을 통해 portfolioOwner 상태를 생성함.
