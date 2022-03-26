@@ -1,18 +1,15 @@
 import { likeModel } from "../schemas/like";
 
+
 class like {
     async create({ newLike }) {
       const likeUp = await likeModel.create(newLike);
       return likeUp;
     }
   
-    async findByAdminId({ adminId }) {
-      const like = await likeModel.find({ adminId });
+    async findByCompanyId({ userId,companyId }) {
+      const like = await likeModel.findOne({ userId,companyId });
       return like;
-    }
-    async findByUserId({ adminId, userId }) {
-        const like = await likeModel.findOne({ adminId, userId });
-        return like;
     }
   
     async findByUserIdCount({ userId }) {
@@ -20,8 +17,8 @@ class like {
       return likes;
     }
   
-    async deleteById({ adminId, userId }) {
-      const deleteLike = await likeModel.deleteOne({ adminId, userId });
+    async deleteByid({ userId,companyId}) {
+      const deleteLike = await likeModel.deleteOne({ userId,companyId });
       return deleteLike;
     }
   }
