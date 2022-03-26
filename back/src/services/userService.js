@@ -109,6 +109,12 @@ class UserAuthService {
       user = await User.update({ user_id, fieldToUpdate, newValue });
     }
 
+    if (toUpdate.role) {
+      const fieldToUpdate = "role";
+      const newValue = toUpdate.role;
+      user = await User.update({ user_id, fieldToUpdate, newValue });
+    }
+
     if (toUpdate.description) {
       const fieldToUpdate = "description";
       const newValue = toUpdate.description;

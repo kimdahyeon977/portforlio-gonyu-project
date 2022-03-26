@@ -3,7 +3,7 @@ import { Router } from "express";
 import { login_required } from "../middlewares/login_required";
 import { userAuthService } from "../services/userService";
 
-import { utils } from "../common/utils";
+import { util, utils } from "../common/utils";
 
 const userAuthRouter = Router();
 certificateRouter.use(login_required);
@@ -93,6 +93,11 @@ userAuthRouter.put(
     try {
       // URI로부터 사용자 id를 추출함.
       const userId = req.params.id;
+      const user = await userAuthService.getUser({
+        userId,
+      });
+
+      util.noPermission(user, req.currentUserId);
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const name = req.body.name ?? null;
       const email = req.body.email ?? null;
@@ -101,8 +106,6 @@ userAuthRouter.put(
       const description = req.body.description ?? null;
 
       const toUpdate = { name, email, password, role, description };
-
-      utils.editPermission(userId, req.currentUserId);
 
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedUser = await userAuthService.setUser({ userId, toUpdate });
@@ -129,7 +132,7 @@ userAuthRouter.delete(
         userId,
       });
 
-      utils.deletePermission(userId, req.currentUserId);
+      util.noPermission(user, req.currentUserId);
       // 위 id를 이용하여 db에서 데이터 삭제하기
       const result = await userAuthService.deleteUser({
         userId,

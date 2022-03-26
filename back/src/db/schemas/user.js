@@ -25,8 +25,8 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'member','recruter'],
-      default: 'member' 
+      enum: ["admin", "member", "recruter"],
+      default: "member",
     },
   },
   {
@@ -36,6 +36,3 @@ const UserSchema = new Schema(
 const UserModel = model("User", UserSchema);
 
 export { UserModel };
-
-
-
