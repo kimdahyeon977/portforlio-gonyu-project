@@ -104,7 +104,6 @@ function LoginForm() {
                 </Button>
               </Col>
             </Form.Group>
-            
             <GoogleLogin
               clientId="557898764993-m4919nhfs6d07uspbtianuh6ilfr60n4.apps.googleusercontent.com"
               buttonText="Login"
