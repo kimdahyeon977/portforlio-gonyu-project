@@ -11,18 +11,20 @@ class User {
     return user;
   }
 
-  async findById({ user_id }) {
-    const user = await UserModel.findOne({ id: user_id });
+  async findById({ userId }) {
+    const user = await UserModel.findOne({ id: userId });
     return user;
   }
 
-  async findAll() {
-    const users = await UserModel.find({});
+  async findAll({ sortKey }) {
+    const users = await UserModel.find({}).sort(
+      sortKey ? sortKey : { createdAt: "-1" }
+    ); //디폴트는 계정 생성일이 최신순으로 정렬, 내림차순;
     return users;
   }
 
-  async update({ user_id, fieldToUpdate, newValue }) {
-    const filter = { id: user_id };
+  async update({ userId, fieldToUpdate, newValue }) {
+    const filter = { id: userId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
@@ -32,6 +34,13 @@ class User {
       option
     );
     return updatedUser;
+  }
+  async deleteById({ userId }) {
+    const deleteResult = await UserModel.deleteOne({
+      id: userId,
+    });
+    const isDataDeleted = deleteResult.deletedCount === 1;
+    return isDataDeleted;
   }
 }
 

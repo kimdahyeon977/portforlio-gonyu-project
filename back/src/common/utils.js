@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-const secret = "elice";
 var util = {};
 util.noPermission = function (owner, requester) {
   if (owner.userId != requester.id) {
@@ -15,21 +13,9 @@ util.adminshow = function (requester) {
     throw new Error("no Permission!");
   }
 };
-util.setUserToken = (res, user) => {
-  const token = jwt.sign(user, secret);
-  res.cookie("token", token);
+util.isRecruter = function (requester) {
+  if (requester.role !== "recruter") {
+    throw new Error("채용관계자만 좋아요를 누를수있습니다!");
+  }
 };
 export { util };
-
-class Utils {
-  editPermission(requester, owner) {
-    if (requester !== owner) throw new Error("수정할 권한이 없습니다.");
-  }
-
-  deletePermission(requester, owner) {
-    if (requester !== owner) throw new Error("삭제할 권한이 없습니다.");
-  }
-}
-
-const utils = new Utils();
-export { utils };
