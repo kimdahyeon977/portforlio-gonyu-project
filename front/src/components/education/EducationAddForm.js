@@ -11,11 +11,12 @@ function EducationAddForm({ portfolioOwnerId, setIsAdding, setEducationList }) {
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const user_id = portfolioOwnerId;
+
+    const userId = portfolioOwnerId;
 
     try {
       await Api.post("education/create", {
-        user_id,
+        userId,
         school,
         major,
         position,
@@ -25,7 +26,7 @@ function EducationAddForm({ portfolioOwnerId, setIsAdding, setEducationList }) {
     }
 
     try {
-      const res = await Api.get("educationlist", user_id);
+      const res = await Api.get("educationlist", userId);
       setEducationList(res.data);
       setIsAdding(false);
     } catch (err) {

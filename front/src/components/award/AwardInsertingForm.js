@@ -13,7 +13,7 @@ function AwardInsertingForm({setIsInserting, ownerId, setAwards}){
         event.stopPropagation();
 
         await API.post("award/create", {
-            user_id : ownerId,
+            userId : ownerId,
             title,
             description,
             getDate,
