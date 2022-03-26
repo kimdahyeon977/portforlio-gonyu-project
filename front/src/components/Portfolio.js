@@ -7,7 +7,7 @@ import * as Api from "../api";
 import User from "./user/User";
 import Certificates from "./certificate/Certificates";
 import Awards from "./award/Awards";
-import EducationLevel from "./education/EducationLevel";
+import Educations from "./education/Educations";
 import ProjectList from "./project/ProjectList";
 
 function Portfolio() {
@@ -73,7 +73,7 @@ function Portfolio() {
             portfolioOwnerId={portfolioOwner.id}
             isEditable={portfolioOwner.id === userState.user?.id}
           ></ProjectList>
-          <EducationLevel
+          <Educations
             portfolioOwnerId={portfolioOwner.id}
             isEditable={portfolioOwner.id === userState.user?.id}
             />
@@ -89,4 +89,5 @@ function Portfolio() {
 }
 
 export default Portfolio;
+
 
