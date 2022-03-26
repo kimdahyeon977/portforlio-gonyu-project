@@ -3,10 +3,9 @@ import { Router } from "express";
 import { login_required } from "../middlewares/login_required";
 import { userAuthService } from "../services/userService";
 
-import { util, utils } from "../common/utils";
+import { util } from "../common/utils";
 
 const userAuthRouter = Router();
-certificateRouter.use(login_required);
 
 userAuthRouter.post("/user/register", async function (req, res, next) {
   try {
