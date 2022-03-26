@@ -79,19 +79,20 @@ projectRouter.put( //수정
   async function (req, res, next) {
     try {
       //현재 로그인한 사용자 정보추출
-    const user_id = req.currentUserId;
+    const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
-        user_id,
+        userId,
       });
 
       //project owner정보 추출
     const projectId = req.params.id
     const ownerId = await projectService.getProject({ projectId })
+    console.log(ownerId.userId)
+    console.log(currentUserInfo)
     util.hasPermission(ownerId.userId, currentUserInfo);
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 
-
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedProject = await projectService.setProject({ projectId, toUpdate });
 
@@ -105,9 +106,9 @@ projectRouter.put( //수정
 projectRouter.delete("/projects/:id",  //삭제
 async (req, res, next) => {
   try{
-    const user_id = req.currentUserId;
+    const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
-        user_id,
+        userId,
       });
 
       //project owner정보 추출

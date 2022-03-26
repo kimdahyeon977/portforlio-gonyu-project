@@ -53,9 +53,9 @@ certificateRouter.get("/certificates/:id", async function (req, res, next) {
 certificateRouter.put("/certificates/:id", async function (req, res, next) {
   try {
     //현재 로그인한 사용자 정보추출
-    const user_id = req.currentUserId;
+    const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
-      user_id,
+      userId,
     });
     //owner정보 추출
     const certificateId= req.params.id
@@ -83,9 +83,9 @@ certificateRouter.put("/certificates/:id", async function (req, res, next) {
 certificateRouter.delete("/certificates/:id", async function (req, res, next) {
   try {
     //현재 로그인한 사용자 정보추출
-    const user_id = req.currentUserId;
+    const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
-      user_id,
+      userId,
     });
     //owner정보 추출
     const certificateId= req.params.id

@@ -11,7 +11,7 @@ likeRouter.post("/like/:userId", async function (req, res, next) {
     const companyId = req.currentUserId; //adminId는 좋아요누른 사람 Id (즉, 현재 로그인 되어있는 사람)
     const { userId } = req.params; //userId는 게시글 id
     const currentUserInfo = await userAuthService.getUserInfo({
-      user_id: req.currentUserId,
+      userId: req.currentUserId,
     });
 
     util.isRecruter(currentUserInfo.role);
@@ -48,7 +48,7 @@ likeRouter.get("/likelist/:companyId", async function (req, res, next) {
   try {
     //role=recruter인지 확인
     const currentUserInfo = await userAuthService.getUserInfo({
-      user_id: req.currentUserId,
+      userId: req.currentUserId,
     });
     util.isRecruter(currentUserInfo.role);
     const { companyId } = req.params;

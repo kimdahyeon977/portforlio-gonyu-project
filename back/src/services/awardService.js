@@ -46,6 +46,11 @@ class AwardService {
       const newValue = toUpdate.description;
       award = await Award.update({ awardId, fieldToUpdate, newValue });
     }
+    if (toUpdate.description) {
+      const fieldToUpdate = "admissionDate";
+      const newValue = toUpdate.description;
+      award = await Award.update({ awardId, fieldToUpdate, newValue });
+    }
 
     return award;
   }
