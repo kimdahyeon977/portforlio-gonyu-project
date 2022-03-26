@@ -12,7 +12,9 @@ class User {
   }
 
   async findById({ userId }) {
-    const user = await UserModel.findOne({ id: userId });
+    const user = await UserModel.findOne({ id: userId }).sort(
+      sortKey ? sortKey : { name: "1" }
+    );
     return user;
   }
 
