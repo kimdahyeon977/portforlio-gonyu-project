@@ -9,7 +9,7 @@ projectRouter.use(login_required)
 
 projectRouter.post("/project/create",
 async function (req, res, next) { //추가
-  try {  //이런부분들도 다 빼야하는지 오피스아워
+  try {  
     if (is.emptyObject(req.body)) {
       throw new Error(
         "headers의 Content-Type을 application/json으로 설정해주세요"
@@ -18,11 +18,10 @@ async function (req, res, next) { //추가
     // req (request) 에서 데이터 가져오기
     const userId = req.currentUserId;
     const { title, task, fromDate, toDate } = req.body;
+    if( !userId || !title || !fromDate || !toDate){
+      throw new Error("필수입력값을 모두 입력해주세요.")
+      }
     const newProject = await projectService.addProject({userId, title, task, fromDate, toDate });
-
-    if(newProject.errorMessage){
-      throw new Error(newProject.errorMessage);
-    }
     res.status(201).json(newProject);
   } catch (error) {
     next(error);
@@ -32,10 +31,6 @@ projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
   try{
       const projectId = req.params.id;
       const project = await projectService.getProject({ projectId });
-
-      if(project.errorMessage){
-          throw new Error(project.errorMessage);
-      }
       res.status(200).send(project);
 
   } catch(err) {
@@ -45,14 +40,12 @@ projectRouter.get('/project/:id', async (req, res, next) => { //플젝 조회
 
 
 projectRouter.get(
-  "/projectlist/:id",
+  "/projectlist/:id/:sortKey?",
   async(req,res,next)=>{ //유저아이디로 조회
     try{
         const userId = req.params.id
-        const currentUserInfo = await projectService.getUserInfo({userId});
-        if(currentUserInfo.errorMessage){
-          throw new Error(currentUserInfo.errorMessage)
-      }
+        const sortKey=req.query;
+        const currentUserInfo = await projectService.getUserInfo({userId,sort});
         res.status(200).send(currentUserInfo)
     }catch(err){
       next(err);
@@ -98,10 +91,6 @@ projectRouter.put( //수정
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedProject = await projectService.setProject({ projectId, toUpdate });
 
-      if (updatedProject.errorMessage) {
-        throw new Error(updatedProject.errorMessage);
-      }
-
       res.status(200).json(updatedProject);
     } catch (error) {
       next(error);
@@ -116,10 +105,6 @@ async (req, res, next) => {
       const permission = await projectService.getProject({projectId});
     util.noPermission(permission.userId, req.currentUserId)
     const deletedProject= await projectService.deleteProject({ projectId });
-    if (deletedProject.errorMessage) {
-      throw new Error(deletedProject.errorMessage);
-    }
-
     res.send("ok")
   }catch (error){
     next(error);

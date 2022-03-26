@@ -1,13 +1,9 @@
 import { project as Project } from "../db/models/Project"; // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
-import { util } from "../common/utils";
 class projectService {
   async addProject({ userId,title, task, fromDate, toDate }) { //추가
     // db에 저장
     const newProject = {  userId, title, task, fromDate, toDate }; 
     const createdNewProject = await Project.create({ newProject });
-    if( !userId || !title || !fromDate || !toDate){
-    throw new Error("필수입력값을 모두 입력해주세요.")
-    }
     createdNewProject.errorMessage = null;
     return createdNewProject;
   }
@@ -19,9 +15,8 @@ class projectService {
     }
     return project;
 }
-  async getUserInfo({ userId }) {
-    const projects = await Project.findByUserId({ userId })
-
+  async getUserInfo({ userId,sortKey }) { 
+    const projects = await Project.findByUserId({ userId ,sortKey})
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!projects) {
       throw new Error("해당 유저는 조회가능내역이 없습니다. 다시 한 번 확인해 주세요.")
