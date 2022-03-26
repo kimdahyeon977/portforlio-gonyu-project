@@ -22,6 +22,7 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
     return (
         <Form onSubmit={submitHandler}>
             <Form.Group controlId="formBasicTitle">
+                <Form.Label>프로젝트 제목</Form.Label>
                 <Form.Control
                     type="text"
                     value={title}
@@ -29,6 +30,9 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
                     onChange={(event) => setTitle(event.target.value)}
                 >
                 </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="formBasicDescription">
+                <Form.Label>프로젝트 설명</Form.Label>
                 <Form.Control
                     type="text"
                     value={description}
@@ -60,10 +64,10 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
                 </Row>
             </Form.Group>
             <Form.Group>
-                <Row>
-                    <Col className="text-center mt-3">
-                        <Button type="submit" variant="primary">내 삽질 기록 추가하기</Button>
-                        <Button variant="danger" onClick={() => setIsInserting(false)}>취소</Button>
+                <Row className="mt-3">
+                    <Col className="text-center">
+                        <Button type="submit" variant="primary" className="me-3">내 삽질 기록 추가하기</Button>
+                        <Button variant="danger" onClick={() => setIsInserting(false)} className="me-3">취소</Button>
                     </Col>
                 </Row>
             </Form.Group>
