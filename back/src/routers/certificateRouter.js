@@ -3,7 +3,7 @@ import { Router } from "express";
 import { login_required } from "../middlewares/login_required";
 import { certificateService } from "../services/certificateService";
 
-import { utils } from "../common/utils";
+import { util } from "../common/utils";
 
 const certificateRouter = Router();
 certificateRouter.use(login_required);
@@ -50,19 +50,24 @@ certificateRouter.get("/certificates/:id", async function (req, res, next) {
 
 certificateRouter.put("/certificates/:id", async function (req, res, next) {
   try {
+    //현재 로그인한 사용자 정보추출
+    const user_id = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+      user_id,
+    });
+
     // URI로부터 수상 데이터 id를 추출함.
     const certificateId = req.params.id;
-    const certificate = await certificateService.getCertificate({
+    const permission = await certificateService.getCertificate({
       certificateId,
     });
+    util.noPermission(permission, currentUserInfo);
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
     const description = req.body.description ?? null;
     const whenDate = req.body.whenDate ?? null;
     const toUpdate = { title, description, whenDate };
-
-    utils.editPermission(certificate.userId, req.currentUserId);
 
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
     const changedCertificate = await certificateService.setCertificate({
@@ -80,11 +85,11 @@ certificateRouter.delete("/certificates/:id", async function (req, res, next) {
   try {
     // req (request) 에서 id 가져오기
     const certificateId = req.params.id;
-    const certificate = await certificateService.getCertificate({
+    const permission = await certificateService.getCertificate({
       certificateId,
     });
 
-    utils.deletePermission(certificate.userId, req.currentUserId);
+    util.noPermission(permission, req.currentUserId);
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await certificateService.deleteCertificate({
       certificateId,

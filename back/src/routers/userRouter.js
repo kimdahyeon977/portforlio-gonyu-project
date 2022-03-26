@@ -6,6 +6,7 @@ import { userAuthService } from "../services/userService";
 import { utils } from "../common/utils";
 
 const userAuthRouter = Router();
+certificateRouter.use(login_required);
 
 userAuthRouter.post("/user/register", async function (req, res, next) {
   try {
