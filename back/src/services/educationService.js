@@ -27,7 +27,7 @@ class EducationService {
   }
 
   async getEducationList({ userId, sortKey }) {
-    const educations = await education.findByUserId({ userId, sortKey });
+    const educations = await education.findByUserId({ userId, sortKey }); // sortKey = {sortfield: sortvalue}
     return educations;
   }
 

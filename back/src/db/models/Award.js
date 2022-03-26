@@ -11,9 +11,11 @@ class Award {
     return award;
   }
 
-  async findByUserId({ userId }) {
-    const awards = await AwardModel.find({ userId });
-    return awards;
+  static async findByUserId({ userId, sortKey }) {
+    const educations = await EducationModel.find({ userId }).sort(
+      sortKey ? sortKey : { admissionDate: "-1" }
+    ); //디폴트는 입학일이 최신순으로 정렬, 내림차순
+    return educations;
   }
 
   async update({ awardId, fieldToUpdate, newValue }) {

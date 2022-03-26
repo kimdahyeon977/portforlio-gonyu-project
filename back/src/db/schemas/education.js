@@ -1,11 +1,8 @@
 import { Schema, model } from "mongoose";
-
+const id = require("./types/id.js");
 const EducationSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-    },
+    id,
     userId: {
       type: String,
       required: true,

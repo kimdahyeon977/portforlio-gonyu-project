@@ -1,22 +1,24 @@
 import { CertificateModel } from "../schemas/certificate";
 
 class Certificate {
-  static async create({ newCertificate }) {
+  async create({ newCertificate }) {
     const createdNewCertificate = await CertificateModel.create(newCertificate);
     return createdNewCertificate;
   }
 
-  static async findById({ certificateId }) {
+  async findById({ certificateId }) {
     const certificate = await CertificateModel.findOne({ id: certificateId });
     return certificate;
   }
 
-  static async findByUserId({ user_id }) {
-    const certificates = await CertificateModel.find({ user_id });
+  async findByUserId({ userId, sortKey }) {
+    const certificates = await CertificateModel.find({ userId }).sort(
+      sortKey ? sortKey : { whenDate: "-1" }
+    ); //디폴트는 자격증 취득일이 최신순으로 정렬, 내림차순;
     return certificates;
   }
 
-  static async update({ certificateId, fieldToUpdate, newValue }) {
+  async update({ certificateId, fieldToUpdate, newValue }) {
     const filter = { id: certificateId };
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
@@ -29,7 +31,7 @@ class Certificate {
     return updatedCertificate;
   }
 
-  static async deleteById({ certificateId }) {
+  async deleteById({ certificateId }) {
     const deleteResult = await CertificateModel.deleteOne({
       id: certificateId,
     });
@@ -38,4 +40,5 @@ class Certificate {
   }
 }
 
-export { Certificate };
+const certificate = new Certificate();
+export { certificate };

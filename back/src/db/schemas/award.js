@@ -1,10 +1,11 @@
 import { Schema, model } from "mongoose";
-
-const id=require('./types/id.js')
-
+const id = require("./types/id.js");
 const AwardSchema = new Schema(
   {
-    id,
+    id: {
+      type: String,
+      required: true,
+    },
     userId: {
       type: String,
       required: true,
@@ -13,13 +14,17 @@ const AwardSchema = new Schema(
       type: String,
       required: true,
     },
+    admissionDate: {
+      type: Date,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
     },
   },
+)
 
-);
 
 const AwardModel = model("Award", AwardSchema);
 

@@ -26,8 +26,10 @@ class Project {
     return projects;
   }
   
-  async findByUserId({ userId }) { //해당 유저찾기
-    const projects = await ProjectModel.find({ userId }).sort({fromDate:-1}); //가장 최근에 진행한 플젝을 앞으로가게 정렬!
+  async findByUserId({ userId, sortKey }) {
+    const projects = await ProjectModel.find({ userId }).sort(
+      sortKey ? sortKey : { fromDate: "-1" }
+    ); //디폴트는 입학일이 최신순으로 정렬, 내림차순
     return projects;
   }
   async deleteById({projectId}){ //삭제
