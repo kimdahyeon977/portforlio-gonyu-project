@@ -1,4 +1,4 @@
-import { award as Award } from "../db";
+import { award as Award } from "../db/models/Award";
 
 
 class AwardService {
@@ -23,9 +23,9 @@ class AwardService {
 
 
 
-  async setAward({ awardId, toUpdate }) {
+  async setAward( {id, toUpdate }) {
     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
-    let award = await Award.findById({ awardId });
+    let award = await Award.findById( {id} );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
@@ -37,19 +37,31 @@ class AwardService {
     if (toUpdate.title) {
       const fieldToUpdate = "title";
       const newValue = toUpdate.title;
-      award = await Award.update({ awardId, fieldToUpdate, newValue });
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
     }
-
 
     if (toUpdate.description) {
       const fieldToUpdate = "description";
       const newValue = toUpdate.description;
-      award = await Award.update({ awardId, fieldToUpdate, newValue });
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
     }
-    if (toUpdate.description) {
+
+    if (toUpdate.admissionDate) {
       const fieldToUpdate = "admissionDate";
-      const newValue = toUpdate.description;
-      award = await Award.update({ awardId, fieldToUpdate, newValue });
+      const newValue = toUpdate.admissionDate;
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
     }
 
     return award;
@@ -57,8 +69,8 @@ class AwardService {
 
 
 
-  async getAwardInfo( awardId ) {
-    const award = await Award.findById( awardId );
+  async getAwardInfo( id) {
+    const award = await Award.findById( id );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
@@ -69,16 +81,16 @@ class AwardService {
   }
 
 
-  async deleteAward({ awardId }) {//삭제
+  async deleteAward({ id }) {//삭제
 
-    let awardDel = await Award.findById({ awardId });
+    let awardDel = await Award.findById({ id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!awardDel) {
       throw new Error("수상내역 없음") 
     }
 
-    const awardDelete = await Award.deleteByid({ awardId });
+    const awardDelete = await Award.deleteByid({ id });
     return awardDelete
   }
   

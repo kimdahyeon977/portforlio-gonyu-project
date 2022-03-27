@@ -61,20 +61,17 @@ AwardRouter.put("/awards/:id", async function (req, res, next) {
       userId,
     });
     //owner정보 추출
-    const certificateId= req.params.id
-    const ownerId = await AwardService.getAwardInfo(certificateId);
-    console.log(ownerId.userId)
-    console.log(currentUserInfo)
+    const {id}= req.params
+    const ownerId = await AwardService.getAwardInfo(id);
     util.hasPermission(ownerId.userId, currentUserInfo)
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
     const description = req.body.description ?? null;
-
-    const toUpdate = { title, description };
-
+    const admissionDate = req.body.admissionDate ?? null;
+    const toUpdate = { title, description, admissionDate };
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-    const award = await AwardService.setAward({ awardId, toUpdate });
+    const award = await AwardService.setAward({ id, toUpdate });
 
     if (award.errorMessage) {
       throw new Error(award.errorMessage);
@@ -89,8 +86,8 @@ AwardRouter.put("/awards/:id", async function (req, res, next) {
 AwardRouter.get("/awards/:id", async function (req, res, next) {
   // 작동
   try {
-    const awardId = req.params.id;
-    const currentUserInfo = await AwardService.getAwardInfo({ awardId });
+    const{id} = req.params;
+    const currentUserInfo = await AwardService.getAwardInfo(id );
 
     if (currentUserInfo.errorMessage) {
       throw new Error(currentUserInfo.errorMessage);
@@ -111,12 +108,13 @@ AwardRouter.delete("/awards/:id", async function (req, res, next) {
       userId,
     });
     //owner정보 추출
-    const certificateId= req.params.id
-    const ownerId = await AwardService.getAwardInfo(certificateId);
+    const {id}= req.params
+    const ownerId = await AwardService.getAwardInfo(id);
+    console.log(ownerId.userId)
     util.hasPermission(ownerId.userId, currentUserInfo)
 
     // 위 id를 이용하여 db에서 데이터 삭제하기
-    const result = await AwardService.deleteAward({ awardId });
+    const result = await AwardService.deleteAward(id );
 
     if (result.errorMessage) {
       throw new Error(result.errorMessage);

@@ -59,9 +59,9 @@ projectRouter.get(
     async function (req, res, next) {
       try {
         //현재 로그인한 사용자 정보추출
-        const user_id = req.currentUserId;
+        const userId = req.currentUserId;
         const currentUserInfo = await userAuthService.getUserInfo({
-          user_id,
+          userId,
         });
         util.isAdmin(currentUserInfo.role)
         const projects = await projectService.getProjects();
@@ -87,8 +87,6 @@ projectRouter.put( //수정
       //project owner정보 추출
     const projectId = req.params.id
     const ownerId = await projectService.getProject({ projectId })
-    console.log(ownerId.userId)
-    console.log(currentUserInfo)
     util.hasPermission(ownerId.userId, currentUserInfo);
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 

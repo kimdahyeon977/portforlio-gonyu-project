@@ -1,5 +1,5 @@
 // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
-import { certificate } from "../db";
+import { certificate } from "../db/models/Certificate";
 import { v4 as uuidv4 } from "uuid";
 
 class CertificateService {
@@ -14,9 +14,9 @@ class CertificateService {
     return createdNewCertificate;
   }
 
-  async getCertificate( certificateId ) {
+  async getCertificate({ certificateId }) {
     // 해당 id를 가진 데이터가 db에 존재 여부 확인
-    const Certificate = await certificate.findById( certificateId );
+    const Certificate = await certificate.findById({certificateId });
     if (!Certificate) {
       throw new Error(
         "해당 id를 가진 자격증 데이터는 없습니다. 다시 한 번 확인해 주세요."

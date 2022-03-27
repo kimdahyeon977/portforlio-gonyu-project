@@ -13,7 +13,7 @@ util.hasPermission = function (owner, requester) {
 util.isAdmin = function (requester) {
   //관리자만 볼수 있는 모든 유저의 플젝정보보기
   if (requester != "admin") {
-    throw new Error("no Permission!");
+    throw new Error("admin 유저만 모든 프로젝트를 볼 수 있습니다.");
   }
 };
 

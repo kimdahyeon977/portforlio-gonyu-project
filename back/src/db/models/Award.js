@@ -13,8 +13,8 @@ class Award {
   //   return educations;
   // }
 
-  async findById({ awardId }) {
-    const award = await AwardModel.findOne({ id: awardId });
+  async findById( {id} ) {
+    const award = await AwardModel.findOne( id);
     return award;
   }
 
@@ -38,8 +38,8 @@ class Award {
     return updatedAward;
   }
 
-  async deleteByid({ awardId }) {
-    const deleteAward = await AwardModel.deleteOne({ id: awardId });
+  async deleteByid(id) {
+    const deleteAward = await AwardModel.deleteOne(id);
     return deleteAward;
   }
 }
