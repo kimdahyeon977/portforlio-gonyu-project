@@ -27,7 +27,7 @@ function Header() {
   return (
     <Nav
       activeKey={location.pathname}
-      style={{ backgroundColor: isDarkMode ? 'black' : 'white' }}
+      style={{ backgroundColor: isDarkMode ? '#444' : '#CCC' }}
     >
       <Nav.Item className="me-auto mb-5">
         <Nav.Link
