@@ -5,11 +5,10 @@ import { userAuthService } from "../services/userService";
 import { login_required } from "../middlewares/login_required";
 import { util } from "../common/utils";
 
+const AwardRouter = Router();
+AwardRouter.use(login_required);
 
-const awardRouter = Router();
-awardRouter.use(login_required);
-
-awardRouter.post("/award/create", async function (req, res, next) {
+AwardRouter.post("/award/create", async function (req, res, next) {
   // 작동 됨
   try {
     if (is.emptyObject(req.body)) {
@@ -38,34 +37,35 @@ awardRouter.post("/award/create", async function (req, res, next) {
   }
 });
 
-awardRouter.get("/awardlist/:userId/:sortKey?", async function (req, res, next) { // 작동됨
-  try {
-    const userId = req.params.userId;
-    const sortKey = req.query;
-    const awardList = await AwardService.getAwardList({ userId,sortKey });
-    res.status(200).send(awardList);
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-
-awardRouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨 
+AwardRouter.get(
+  "/awardlist/:userId/:sortKey?",
+  async function (req, res, next) {
+    // 작동됨
     try {
-      //현재 로그인한 사용자 정보추출
-      const userId = req.currentUserId;
-      const currentUserInfo = await userAuthService.getUserInfo({
-        userId,
-      });
+      const userId = req.params.userId;
+      const sortKey = req.query;
+      const awardList = await AwardService.getAwardList({ userId, sortKey });
+      res.status(200).send(awardList);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-      //owner정보 추출
-    const awardId = req.params.id
-    const ownerId = await AwardService.getAwardInfo({ awardId })
-    util.hasPermission(ownerId.userId, currentUserInfo);
-
-
-    
+AwardRouter.put("/awards/:id", async function (req, res, next) {
+  // 작동 됨
+  try {
+    //현재 로그인한 사용자 정보추출
+    const userId = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+      userId,
+    });
+    //owner정보 추출
+    const certificateId= req.params.id
+    const ownerId = await AwardService.getAwardInfo(certificateId);
+    console.log(ownerId.userId)
+    console.log(currentUserInfo)
+    util.hasPermission(ownerId.userId, currentUserInfo)
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
@@ -86,7 +86,7 @@ awardRouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
   }
 });
 
-awardRouter.get("/awards/:id", async function (req, res, next) {
+AwardRouter.get("/awards/:id", async function (req, res, next) {
   // 작동
   try {
     const awardId = req.params.id;
@@ -102,13 +102,18 @@ awardRouter.get("/awards/:id", async function (req, res, next) {
   }
 });
 
-awardRouter.delete("/awards/:id", async function (req, res, next) {
+AwardRouter.delete("/awards/:id", async function (req, res, next) {
   // 동작 확인
   try {
-    const awardId = req.params.id;
-
-    const currentUserInfo = await AwardService.getAwardInfo({ awardId });
-    util.hasPermission(currentUserInfo.userId, req.currentUserId)
+    //현재 로그인한 사용자 정보추출
+    const userId = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+      userId,
+    });
+    //owner정보 추출
+    const certificateId= req.params.id
+    const ownerId = await AwardService.getAwardInfo(certificateId);
+    util.hasPermission(ownerId.userId, currentUserInfo)
 
     // 위 id를 이용하여 db에서 데이터 삭제하기
     const result = await AwardService.deleteAward({ awardId });
@@ -117,10 +122,10 @@ awardRouter.delete("/awards/:id", async function (req, res, next) {
       throw new Error(result.errorMessage);
     }
 
-    res.json('삭제완료')
+    res.json("삭제완료");
   } catch (error) {
     next(error);
   }
 });
 
-export { awardRouter };
+export { AwardRouter }

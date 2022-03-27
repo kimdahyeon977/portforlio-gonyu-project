@@ -57,8 +57,8 @@ class AwardService {
 
 
 
-  async getAwardInfo({ awardId }) {
-    const award = await Award.findById({ awardId });
+  async getAwardInfo( awardId ) {
+    const award = await Award.findById( awardId );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
