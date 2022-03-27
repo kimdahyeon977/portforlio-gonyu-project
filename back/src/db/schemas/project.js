@@ -16,7 +16,7 @@ const projectSchema = Schema(
     task: {
       //어떤 업무수행했는지
       type: String,
-      required: true,
+      required: false,
     },
     fromDate: {
       //프로젝트 수행 날짜

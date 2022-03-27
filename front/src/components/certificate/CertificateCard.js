@@ -19,7 +19,7 @@ function CertificateCard({ certificate, isEditable, setIsEditing, setCertificate
           <span>{certificate.title}</span>
           <br />
           <span className="text-muted">{`${certificate.description} (${
-            certificate.when_date || ""
+            certificate.whenDate || ""
           })`}</span>
         </Col>
         {isEditable && (
