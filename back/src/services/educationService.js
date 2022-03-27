@@ -1,44 +1,44 @@
 // from을 폴더(db) 로 설정 시, 디폴트로 index.js 로부터 import함.
-import { Education } from "../db";
+import { education as Education } from "../db";
 import { v4 as uuidv4 } from "uuid";
 
 class EducationService {
-  static async addEducation({ user_id, school, major, position }) {
+  async addEducation({ userId, school, major, position, admissionDate }) {
     // id로 유니크 값 사용
     const id = uuidv4();
 
     // db에 저장
-    const newEducation = { id, user_id, school, major, position };
+    const newEducation = { id, userId, school, major, position, admissionDate };
     const createdNewEducation = await Education.create({ newEducation });
 
     return createdNewEducation;
   }
 
-  static async getEducation({ educationId }) {
+  async getEducation(educationId) {
     // 해당 id를 가진 데이터가 db에 존재 여부 확인
-    const education = await Education.findById({ educationId });
+    const education = await Education.findById( educationId );
     if (!education) {
-      const errorMessage =
-        "해당 id를 가진 수상 데이터는 없습니다. 다시 한 번 확인해 주세요.";
-      return { errorMessage };
+      throw new Error(
+        "해당 id를 가진 학력 데이터는 없습니다. 다시 한 번 확인해 주세요."
+      );
     }
 
     return education;
   }
 
-  static async getEducationList({ user_id }) {
-    const educations = await Education.findByUserId({ user_id });
+  async getEducationList({ userId, sortKey }) {
+    const educations = await Education.findByUserId({ userId, sortKey }); // sortKey = {sortfield: sortvalue}
     return educations;
   }
 
-  static async setEducation({ educationId, toUpdate }) {
-    let education = await Education.findById({ educationId });
+  async setEducation({ educationId, toUpdate }) {
+    let education = await Education.findById( educationId );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!education) {
-      const errorMessage =
-        "해당 id를 가진 학력 데이터는 없습니다. 다시 한 번 확인해 주세요.";
-      return { errorMessage };
+      throw new Error(
+        "해당 id를 가진 학력 데이터는 없습니다. 다시 한 번 확인해 주세요."
+      );
     }
 
     if (toUpdate.school) {
@@ -70,22 +70,40 @@ class EducationService {
         newValue,
       });
     }
-
+    if (toUpdate.admissionDate) {
+      const fieldToUpdate = "admissionDate";
+      const newValue = toUpdate.admissionDate;
+      education = await Education.update({
+        educationId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+    if (toUpdate.graduationDate) {
+      const fieldToUpdate = "graduationDate";
+      const newValue = toUpdate.graduationDate;
+      education = await Education.update({
+        educationId,
+        fieldToUpdate,
+        newValue,
+      });
+    }
     return education;
   }
 
-  static async deleteEducation({ educationId }) {
-    const isDataDeleted = await Education.deleteById({ educationId });
+  async deleteEducation( educationId ) {
+    const isDataDeleted = await Education.deleteById( educationId );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!isDataDeleted) {
-      const errorMessage =
-        "해당 id를 가진 수상 데이터는 없습니다. 다시 한 번 확인해 주세요.";
-      return { errorMessage };
+      throw new Error(
+        "해당 id를 가진 학력 데이터는 없습니다. 다시 한 번 확인해 주세요. 데이터가 지워지지 않았습니다."
+      );
     }
 
-    return { status: "ok" };
+    return isDataDeleted;
   }
 }
 
-export { EducationService };
+const educationService = new EducationService();
+export { educationService };

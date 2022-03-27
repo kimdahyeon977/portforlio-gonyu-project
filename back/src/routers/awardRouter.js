@@ -1,26 +1,30 @@
 import is from "@sindresorhus/is";
 import { Router } from "express";
-import { AwardService } from "../services/awardService";
-const Awardrouter = Router();
+import { awardService as AwardService } from "../services/awardService";
+import { userAuthService } from "../services/userService";
+import { login_required } from "../middlewares/login_required";
+import { util } from "../common/utils";
 
-Awardrouter.post("/award/create", async function (req, res, next) {  // 작동 됨
+const AwardRouter = Router();
+AwardRouter.use(login_required);
+
+AwardRouter.post("/award/create", async function (req, res, next) {
+  // 작동 됨
   try {
     if (is.emptyObject(req.body)) {
       throw new Error(
         "headers의 Content-Type을 application/json으로 설정해주세요"
       );
     }
-
-    // req (request) 에서 데이터 가져오기
-    const user_id = req.body.user_id
-    const title = req.body.title;
-    const description = req.body.description;
+    const userId = req.currentUserId;
+    const { title, description ,admissionDate} = req.body;
 
     // 위 데이터를 유저 db에 추가하기
     const newAward = await AwardService.addAward({
-      user_id,
+      userId,
       title,
       description,
+      admissionDate
     });
 
     if (newAward.errorMessage) {
@@ -33,36 +37,41 @@ Awardrouter.post("/award/create", async function (req, res, next) {  // 작동 �
   }
 });
 
-Awardrouter.get("/awardlist/:user_id", async function (req, res, next) { // 작동됨
-  try {
-    const user_id = req.params.user_id;
-    const awardList = await AwardService.getAwardList({ user_id });
-    res.status(200).send(awardList);
-  } catch (error) {
-    next(error);
-  }
-});
-
-Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
-  try {
-    // URI로부터 수상 데이터 id를 추출함.
-    const award_Id = req.params.id;
-
-    const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
-
-    if (req.currentUserId !== currentUserInfo.user_id){
-      throw new Error("해당 아이디가 다릅니다");
+AwardRouter.get(
+  "/awardlist/:userId/:sortKey?",
+  async function (req, res, next) {
+    // 작동됨
+    try {
+      const userId = req.params.userId;
+      const sortKey = req.query;
+      const awardList = await AwardService.getAwardList({ userId, sortKey });
+      res.status(200).send(awardList);
+    } catch (error) {
+      next(error);
     }
-    
+  }
+);
+
+AwardRouter.put("/awards/:id", async function (req, res, next) {
+  // 작동 됨
+  try {
+    //현재 로그인한 사용자 정보추출
+    const userId = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+      userId,
+    });
+    //owner정보 추출
+    const {id}= req.params
+    const ownerId = await AwardService.getAwardInfo(id);
+    util.hasPermission(ownerId.userId, currentUserInfo)
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
     const description = req.body.description ?? null;
-
-    const toUpdate = { title, description }; 
-    
+    const admissionDate = req.body.admissionDate ?? null;
+    const toUpdate = { title, description, admissionDate };
     // 위 추출된 정보를 이용하여 db의 데이터 수정하기
-    const award = await AwardService.setAward({ award_Id, toUpdate });
+    const award = await AwardService.setAward({ id, toUpdate });
 
     if (award.errorMessage) {
       throw new Error(award.errorMessage);
@@ -74,46 +83,47 @@ Awardrouter.put("/awards/:id", async function (req, res, next) {  // 작동 됨
   }
 });
 
-Awardrouter.get("/awards/:id", async function (req, res, next) {  // 작동 
-    try {
-      const award_Id = req.params.id;
-      const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
-
-      if (currentUserInfo.errorMessage) {
-        throw new Error(currentUserInfo.errorMessage);
-      }
-
-      res.status(200).send(currentUserInfo);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-Awardrouter.delete("/awards/:id", async function (req, res, next) {  // 동작 확인
+AwardRouter.get("/awards/:id", async function (req, res, next) {
+  // 작동
   try {
-    const award_Id = req.params.id
+    const{id} = req.params;
+    const currentUserInfo = await AwardService.getAwardInfo(id );
 
-    const currentUserInfo = await AwardService.getAwardInfo({ award_Id });
-
-    if (req.currentUserId !== currentUserInfo.user_id){
-      throw new Error("해당 아이디가 다릅니다");
+    if (currentUserInfo.errorMessage) {
+      throw new Error(currentUserInfo.errorMessage);
     }
 
-    
-    // 위 id를 이용하여 db에서 데이터 삭제하기
-    const result = await AwardService.deleteAward({ award_Id });
-
-    if (result.errorMessage) {
-      throw new Error(result.errorMessage);
-    }
-
-    res.status(200).send('삭제완료');
+    res.status(200).send(currentUserInfo);
   } catch (error) {
     next(error);
   }
 });
 
+AwardRouter.delete("/awards/:id", async function (req, res, next) {
+  // 동작 확인
+  try {
+    //현재 로그인한 사용자 정보추출
+    const userId = req.currentUserId;
+    const currentUserInfo = await userAuthService.getUserInfo({
+      userId,
+    });
+    //owner정보 추출
+    const {id}= req.params
+    const ownerId = await AwardService.getAwardInfo(id);
+    console.log(ownerId.userId)
+    util.hasPermission(ownerId.userId, currentUserInfo)
 
+    // 위 id를 이용하여 db에서 데이터 삭제하기
+    const result = await AwardService.deleteAward(id );
 
-export { Awardrouter };
+    if (result.errorMessage) {
+      throw new Error(result.errorMessage);
+    }
+
+    res.json("삭제완료");
+  } catch (error) {
+    next(error);
+  }
+});
+
+export { AwardRouter }

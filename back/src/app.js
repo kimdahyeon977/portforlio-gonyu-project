@@ -4,17 +4,17 @@ import { userAuthRouter } from "./routers/userRouter";
 import { certificateRouter } from "./routers/certificateRouter";
 import { educationRouter } from "./routers/educationRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
-import { Awardrouter } from "./routers/awardRouter";
-import { login_required } from "./middlewares/login_required";
+import { AwardRouter } from "./routers/awar dRouter";
+import { likeRouter } from "./routers/likeRouter";
 import { projectRouter } from "./routers/projectRouter";
-const app = express();// CORS 에러 방지
-
+const app = express(); // CORS 에러 방지
 
 // express 기본 제공 middleware
 // express.json(): POST 등의 요청과 함께 오는 json형태의 데이터를 인식하고 핸들링할 수 있게 함.
 // express.urlencoded: 주로 Form submit 에 의해 만들어지는 URL-Encoded 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // 기본 페이지
 app.get("/", (req, res) => {
@@ -25,8 +25,8 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(certificateRouter);
 app.use(educationRouter);
-app.use(projectRouter);
-app.use(login_required,Awardrouter)
+app.use(likeRouter);
+app.use(AwardRouter);
 app.use(projectRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨) //제일 아래에 둬야..

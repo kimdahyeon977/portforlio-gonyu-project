@@ -1,12 +1,14 @@
-import { Award } from "../db";
-import {v4 as uuidv4} from 'uuid' // 랜덤한 값 생성하는 라이브러리
+import { award as Award } from "../db/models/Award";
+
 
 class AwardService {
-    static async addAward({user_id,title,description}) {
+     async addAward({userId,title,description,admissionDate}) {
       
-      const id = uuidv4()
-      const newAward = {id,user_id,title,description};
-  
+      const newAward = {userId,title,description,admissionDate};
+      
+      if (!newAward){
+        throw new Error('입력정보 없음')
+      }
       // db에 저장
       const createdNewAward = await Award.create({ newAward });
       createdNewAward.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
@@ -14,23 +16,20 @@ class AwardService {
       return createdNewAward;
     }
 
-
-    static async getAwardList({ user_id }) {
-      const awards = await Award.findByUserId({ user_id });
+   async getAwardList({ userId,sortKey }) {
+      const awards = await Award.findByUserId({ userId,sortKey });
       return awards;
     }
 
 
 
-  static async setAward({ award_Id, toUpdate }) {
+  async setAward( {id, toUpdate }) {
     // 우선 해당 id 의 유저가 db에 존재하는지 여부 확인
-    let award = await Award.findById({ award_Id });
+    let award = await Award.findById( {id} );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
-      const errorMessage =
-        "수상내역 없음";
-      return { errorMessage };
+      throw new Error("수상내역 없음")
     }
 
 
@@ -38,47 +37,64 @@ class AwardService {
     if (toUpdate.title) {
       const fieldToUpdate = "title";
       const newValue = toUpdate.title;
-      award = await Award.update({ award_Id, fieldToUpdate, newValue });
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
     }
-
 
     if (toUpdate.description) {
       const fieldToUpdate = "description";
       const newValue = toUpdate.description;
-      award = await Award.update({ award_Id, fieldToUpdate, newValue });
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
+    }
+
+    if (toUpdate.admissionDate) {
+      const fieldToUpdate = "admissionDate";
+      const newValue = toUpdate.admissionDate;
+      award = await Award.update({
+        id,
+        fieldToUpdate,
+        newValue,
+      });
     }
 
     return award;
   }
 
-  static async getAwardInfo({ award_Id }) {
-    const award = await Award.findById({ award_Id });
+
+
+  async getAwardInfo( id) {
+    const award = await Award.findById( id );
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!award) {
-      const errorMessage =
-        "해당 수상 내역 X";
-      return { errorMessage };
+      throw new Error("수상내역 없음")
     }
 
     return award;
   }
 
 
-  static async deleteAward({ award_Id }) {//삭제
+  async deleteAward({ id }) {//삭제
 
-    let awardDel = await Award.findById({ award_Id });
+    let awardDel = await Award.findById({ id });
 
     // db에서 찾지 못한 경우, 에러 메시지 반환
     if (!awardDel) {
-      const errorMessage =
-        "해당 수상내역 X";
-      return { errorMessage };
+      throw new Error("수상내역 없음") 
     }
 
-    const awardDelete = await Award.deleteByid({ award_Id });
+    const awardDelete = await Award.deleteByid({ id });
     return awardDelete
   }
   
 }
-export {AwardService}
+
+const awardService = new AwardService()
+export {awardService}

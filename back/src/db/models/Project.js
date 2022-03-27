@@ -4,13 +4,13 @@ class Project {
     const createdNewProject = await ProjectModel.create(newProject);
     return createdNewProject;
   }
-  async findById({ id }) {//해당 플젝 찾기
-    const project = await ProjectModel.findOne({id: id });
+  async findById({ projectId }) {//해당 플젝 찾기
+    const project = await ProjectModel.findOne({id : projectId });
     return project;
   }
 
-  async update({ id, fieldToUpdate, newValue }) { //수정
-    const filter = { id: id }; 
+  async update({ projectId, fieldToUpdate, newValue }) { //수정
+    const filter = { id: projectId }; 
     const update = { [fieldToUpdate]: newValue };
     const option = { returnOriginal: false };
 
@@ -21,15 +21,19 @@ class Project {
     );
     return updatedProject;
   }
-
-
-  
-  async findByUserId({ user_id }) { //해당 유저찾기
-    const projects = await ProjectModel.find({ user_id: user_id });
+  async findAll() { //관리자모드에서 플젝 모두 모아보기
+    const projects = await ProjectModel.find({});
     return projects;
   }
-  async deleteById({id}){ //삭제
-    const deletedProject= await ProjectModel.find({id:id})
+  
+  async findByUserId({ userId, sortKey }) {
+    const projects = await ProjectModel.find({ userId }).sort(
+      sortKey ? sortKey : { fromDate: "-1" }
+    ); //디폴트는 입학일이 최신순으로 정렬, 내림차순
+    return projects;
+  }
+  async deleteById({projectId}){ //삭제
+    const deletedProject= await ProjectModel.deleteOne({id : projectId})
     return deletedProject
   }
 }
