@@ -3,11 +3,7 @@ import { Router } from "express";
 import { projectservice as projectService } from "../services/projectService";
 import { userAuthService } from "../services/userService";
 import { login_required } from "../middlewares/login_required";
-<<<<<<< HEAD
-import { util } from "../middlewares/utils";
-=======
 import { util } from "../common/utils";
->>>>>>> 3641b41a4b54825503902c1178c5e63eb44bb4d7
 const projectRouter = Router();
 projectRouter.use(login_required)
 
@@ -82,15 +78,6 @@ projectRouter.put( //수정
   "/projects/:id",
   async function (req, res, next) {
     try {
-<<<<<<< HEAD
-      const {id} = req.params
-      const permission = await projectService.find({id});
-      util.noPermission(permission.user_id, req.currentUserId)
-      // body data 로부터 업데이트할 사용자 정보를 추출함.
-      const { title, description, from_date, to_date } = req.body; 
-      const toUpdate = { title, description, from_date, to_date }; 
-
-=======
       //현재 로그인한 사용자 정보추출
     const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
@@ -100,11 +87,12 @@ projectRouter.put( //수정
       //project owner정보 추출
     const projectId = req.params.id
     const ownerId = await projectService.getProject({ projectId })
+    //console.log(ownerId.userId)
+    //console.log(currentUserInfo)
     util.hasPermission(ownerId.userId, currentUserInfo);
       // body data 로부터 업데이트할 사용자 정보를 추출함.
       const { title, task, fromDate, toDate } = req.body; 
       const toUpdate = { title, task, fromDate, toDate }; 
->>>>>>> 3641b41a4b54825503902c1178c5e63eb44bb4d7
       // 해당 사용자 아이디로 사용자 정보를 db에서 찾아 업데이트함. 업데이트 요소가 없을 시 생략함
       const updatedProject = await projectService.setProject({ projectId, toUpdate });
 
@@ -118,17 +106,6 @@ projectRouter.put( //수정
 projectRouter.delete("/projects/:id",  //삭제
 async (req, res, next) => {
   try{
-<<<<<<< HEAD
-    const {id} = req.params
-    const permission = await projectService.find({id});
-    util.noPermission(permission.user_id, req.currentUserId)
-    const deletedProject= await projectService.delete({ id });
-    if (deletedProject.errorMessage) {
-      throw new Error(deletedProject.errorMessage);
-    }
-
-    res.send("ok")
-=======
     const userId = req.currentUserId;
     const currentUserInfo = await userAuthService.getUserInfo({
         userId,
@@ -140,7 +117,6 @@ async (req, res, next) => {
     util.hasPermission(ownerId.userId, currentUserInfo);
     const result= await projectService.deleteProject({ projectId });
     res.json(result);
->>>>>>> 3641b41a4b54825503902c1178c5e63eb44bb4d7
   }catch (error){
     next(error);
   }

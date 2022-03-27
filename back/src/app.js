@@ -4,7 +4,7 @@ import { userAuthRouter } from "./routers/userRouter";
 import { certificateRouter } from "./routers/certificateRouter";
 import { educationRouter } from "./routers/educationRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
-import { AwardRouter } from "./routers/awar dRouter";
+import { AwardRouter } from "./routers/awardRouter";
 import { likeRouter } from "./routers/likeRouter";
 import { projectRouter } from "./routers/projectRouter";
 const app = express(); // CORS 에러 방지
