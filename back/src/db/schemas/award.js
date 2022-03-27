@@ -17,7 +17,7 @@ const AwardSchema = new Schema(
     },
     admissionDate: {
       type: Date,
-      required: true,
+      required: false,
     },
   },
 )

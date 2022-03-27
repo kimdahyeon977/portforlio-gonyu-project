@@ -37,20 +37,22 @@ AwardRouter.post("/award/create", async function (req, res, next) {
   }
 });
 
-AwardRouter.get(
-  "/awardlist/:userId/:sortKey?",
-  async function (req, res, next) {
-    // 작동됨
-    try {
-      const userId = req.params.userId;
-      const sortKey = req.query;
-      const awardList = await AwardService.getAwardList({ userId, sortKey });
-      res.status(200).send(awardList);
-    } catch (error) {
-      next(error);
+AwardRouter.get("/awards/:id", async function (req, res, next) {
+  // 작동
+  try {
+    const{id} = req.params;
+    const currentUserInfo = await AwardService.getAwardInfo(id );
+
+    if (currentUserInfo.errorMessage) {
+      throw new Error(currentUserInfo.errorMessage);
     }
+
+    res.status(200).send(currentUserInfo);
+  } catch (error) {
+    next(error);
   }
-);
+});
+
 
 AwardRouter.put("/awards/:id", async function (req, res, next) {
   // 작동 됨
@@ -62,8 +64,9 @@ AwardRouter.put("/awards/:id", async function (req, res, next) {
     });
     //owner정보 추출
     const {id}= req.params
-    const ownerId = await AwardService.getAwardInfo(id);
-    util.hasPermission(ownerId.userId, currentUserInfo)
+    const ownerId = await AwardService.getAwardInfo(id );
+    console.log(ownerId, currentUserInfo)
+    util.hasPermission(ownerId.user_id, currentUserInfo)
 
     // body data 로부터 업데이트할 수상 정보를 추출함.
     const title = req.body.title ?? null;
@@ -86,13 +89,8 @@ AwardRouter.put("/awards/:id", async function (req, res, next) {
 AwardRouter.get("/awards/:id", async function (req, res, next) {
   // 작동
   try {
-    const{id} = req.params;
-    const currentUserInfo = await AwardService.getAwardInfo(id );
-
-    if (currentUserInfo.errorMessage) {
-      throw new Error(currentUserInfo.errorMessage);
-    }
-
+    const awardId = req.params.id;
+    const currentUserInfo = await AwardService.getAwardInfo({ awardId });
     res.status(200).send(currentUserInfo);
   } catch (error) {
     next(error);
