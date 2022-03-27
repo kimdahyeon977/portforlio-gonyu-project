@@ -8,21 +8,21 @@ function CertificateEditForm({ currentCertificate, setIsEditing, setCertificateL
 
   const [title, setTitle] = useState(currentCertificate.title);
   const [description, setDescription] = useState( currentCertificate.description);
-  const [whenDate, setWhenDate] = useState( new Date(currentCertificate.when_date));
+  const [whenDate, setWhenDate] = useState( new Date(currentCertificate.whenDate));
 
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-    // const user_id = currentCertificate.user_id;
-    const when_date = moment(whenDate).format("YYYY-MM-DD");
-    console.log(when_date);
+    // const userId = currentCertificate.userId;
+    const whenDate = moment(whenDate).format("YYYY-MM-DD");
+    console.log(whenDate);
 
     const editedCertificate = {
       ...currentCertificate,
       title,
       description,
-      when_date,
+      whenDate,
     };
 
     try {
@@ -34,7 +34,7 @@ function CertificateEditForm({ currentCertificate, setIsEditing, setCertificateL
       );
       setIsEditing(false);
     } catch (err) {
-      // const res = await Api.get("certificatelist", user_id);
+      // const res = await Api.get("certificatelist", userId);
       // setCertificateList(res.data)
       console.log("자격증 수정에 실패하였습니다.", err);
     }

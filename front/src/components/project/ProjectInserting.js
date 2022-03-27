@@ -14,8 +14,8 @@ function ProjectInserting({ownerId, setProjectList, setIsInserting}){
         event.preventDefault();
         event.stopPropagation();
 
-        const res = await API.get("projectlist", ownerId);
-        setProjectList(res.data);
+        const res = await API.post("project/create", {title,task,description, fromDate,toDate});
+        setProjectList((prev) => [...prev, res.data]);
         setIsInserting(false);
     }
 

@@ -13,23 +13,23 @@ function CertificateAddForm({ portfolioOwnerId, setIsAdding, setCertificateList 
   //입력되는 값으로 text 변경시키는 함수
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const user_id = portfolioOwnerId;
-    const when_date = moment(whenDate).format("YYYY-MM-DD");
+    const userId = portfolioOwnerId;
+    const whenDate = moment(whenDate).format("YYYY-MM-DD");
     // const addedCertificate = {
     //   ...portfolioOwnerId,
     //   title,
     //   description,
-    //   when_date,
+    //   whenDate,
     // }
     try {
       await Api.post("certificate/create", {
-        user_id,
+        userId,
         title,
         description,
-        when_date,
+        whenDate,
       });
 
-      const res = await Api.get("certificatelist", user_id);
+      const res = await Api.get("certificatelist", userId);
       setCertificateList(res.data);
       setIsAdding(false);
     } catch (err) {
