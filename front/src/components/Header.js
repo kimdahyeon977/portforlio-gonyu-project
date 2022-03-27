@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import { UserStateContext, DispatchContext, DarkModeContext } from '../App';
+import "../theme.css"
 
 function Header() {
   const navigate = useNavigate();
@@ -33,7 +34,13 @@ function Header() {
         <Nav.Link
           disabled
           style={{ color: isDarkMode ? '#DDD' : '#333'}}
-        >안녕하세요, 포트폴리오 공유 서비스입니다.
+        >
+        {
+          <div
+            className={isDarkMode?"darkmodePageLogo":"daymodePageLogo"}
+          > </div>
+        }
+          200OK : 포트폴리오 공유 서비스 
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
