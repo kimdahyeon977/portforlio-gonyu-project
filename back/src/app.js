@@ -4,7 +4,7 @@ import { userAuthRouter } from "./routers/userRouter";
 import { certificateRouter } from "./routers/certificateRouter";
 import { educationRouter } from "./routers/educationRouter";
 import { errorMiddleware } from "./middlewares/errorMiddleware";
-import { AwardRouter } from "./routers/awardRouter";
+import { AwardRouter } from "./routers/awar dRouter";
 import { likeRouter } from "./routers/likeRouter";
 import { projectRouter } from "./routers/projectRouter";
 const app = express(); // CORS 에러 방지
@@ -14,6 +14,7 @@ const app = express(); // CORS 에러 방지
 // express.urlencoded: 주로 Form submit 에 의해 만들어지는 URL-Encoded 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // 기본 페이지
 app.get("/", (req, res) => {
