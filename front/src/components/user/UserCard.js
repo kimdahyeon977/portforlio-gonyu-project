@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Card, Row, Button, Col } from "react-bootstrap";
+import { DarkModeContext } from "../../App";
+import { useContext } from "react";
 
 function UserCard({ user, setIsEditing, isEditable, isNetwork }) {
+  const {isDarkMode} = useContext(DarkModeContext);
   const navigate = useNavigate();
   return (
-    <Card className="mb-2 ms-3 mr-5" style={{ width: "18rem" }}>
+    <Card
+      className="mb-2 ms-3 mr-5" style={{ width: "18rem", backgroundColor : isDarkMode ? "#222":"#FFF", color : isDarkMode ? "#FFF":"#000" }}
+    >
       <Card.Body>
         <Row className="justify-content-md-center">
           <Card.Img

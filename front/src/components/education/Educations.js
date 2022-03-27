@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import Education from "./Education";
 import * as Api from "../../api";
 import EducationAddForm from "./EducationAddForm";
+import {DarkModeContext} from "../../App"
 
 function Educations({ portfolioOwnerId, isEditable}) {
+  const {isDarkMode} = useContext(DarkModeContext);
 
   const [educationList, setEducationList] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -15,7 +17,9 @@ function Educations({ portfolioOwnerId, isEditable}) {
   }, [portfolioOwnerId]);
 
   return (
-    <Card>
+    <Card
+      style={{backgroundColor : isDarkMode ? "#222":"#FFF", color : isDarkMode ? "#FFF":"#000"}}
+    >
       <Card.Body>
         <Card.Title>학력</Card.Title>
         {educationList.map((education) => (

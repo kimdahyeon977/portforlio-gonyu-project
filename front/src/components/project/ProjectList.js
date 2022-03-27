@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {Row, Col, Button, Card} from "react-bootstrap"
 
 import * as API from "../../api"
+import { DarkModeContext } from "../../App"
 import Project from "./Project"
 import ProjectInserting from "./ProjectInserting"
 
 function ProjectList({projectOwnerId, isEditable}){
+    const {isDarkMode} = useContext(DarkModeContext);
     const [projectList, setProjectList] = useState([]);
     const [isInserting, setIsInserting] = useState(false);
 
@@ -17,7 +19,9 @@ function ProjectList({projectOwnerId, isEditable}){
     }, [ownerId])
 
     return (
-        <Card>
+        <Card
+            style={{backgroundColor : isDarkMode ? "#222":"#FFF", color : isDarkMode ? "#FFF":"#000"}}
+        >
             <Card.Body>
                 <Card.Title>
                     프로젝트

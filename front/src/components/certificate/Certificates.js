@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, Col, Row, Button } from "react-bootstrap";
 import Certificate from "./Certificate";
 import * as Api from "../../api";
 import CertificateAddForm from "./CertificateAddForm";
+import {DarkModeContext} from "../../App"
 
 function Certificates({ portfolioOwnerId, isEditable}) {
+  const {isDarkMode} = useContext(DarkModeContext);
 
   const [certificateList, setCertificateList] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
@@ -16,7 +18,9 @@ function Certificates({ portfolioOwnerId, isEditable}) {
   }, [portfolioOwnerId]);
 
   return (
-    <Card>
+    <Card
+      style={{backgroundColor : isDarkMode ? "#222":"#FFF", color : isDarkMode ? "#FFF":"#000"}}
+    >
       <Card.Body>
         <Card.Title>자격증</Card.Title>
         {certificateList.map((certificate) => (

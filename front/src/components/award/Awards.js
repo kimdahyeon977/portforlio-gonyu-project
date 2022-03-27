@@ -1,10 +1,13 @@
 import {Button, Card, Col, Row} from 'react-bootstrap'
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import * as API from "../../api"
 import Award from './Award'
 import AwardInsertingForm from './AwardInsertingForm.js'
+import {DarkModeContext} from "../../App"
 
 function Awards({ownerId, isEditable}){
+    const {isDarkMode} = useContext(DarkModeContext);
+
     const [awards, setAwards] = useState([]) //수상 리스트를 빈 배열로 초기화해서 시작
     const [isInserting, setIsInserting] = useState(false)
 
@@ -17,42 +20,46 @@ function Awards({ownerId, isEditable}){
             })
     }, [ownerId])
 
-    return <Card>
-        <Card.Body>
-            <Card.Title>
-                수상목록
-            </Card.Title>
-            <Row>
+    return (
+        <Card
+            style={{backgroundColor : isDarkMode ? "#222":"#FFF", color : isDarkMode ? "#FFF":"#000"}}
+        >
+            <Card.Body>
+                <Card.Title>
+                    수상목록
+                </Card.Title>
+                <Row>
+                    {
+                        awards.map((item) => 
+                            <Award
+                                key = {item.id}
+                                award = {item}
+                                setAwards = {setAwards}
+                                isEditable = {isEditable}
+                            >
+                            </Award>
+                        )
+                    }
+                    {
+                        isEditable && (
+                            <Col className="text-center">
+                                <Button onClick={()=>setIsInserting(true)}>+</Button>
+                            </Col>
+                        )
+                    }
+                </Row>
                 {
-                    awards.map((item) => 
-                        <Award
-                            key = {item.id}
-                            award = {item}
+                    isInserting && (
+                        <AwardInsertingForm
+                            setIsInserting = {setIsInserting}
+                            ownerId = {ownerId}
                             setAwards = {setAwards}
-                            isEditable = {isEditable}
-                        >
-                        </Award>
+                        />
                     )
                 }
-                {
-                    isEditable && (
-                        <Col className="text-center">
-                            <Button onClick={()=>setIsInserting(true)}>+</Button>
-                        </Col>
-                    )
-                }
-            </Row>
-            {
-                isInserting && (
-                    <AwardInsertingForm
-                        setIsInserting = {setIsInserting}
-                        ownerId = {ownerId}
-                        setAwards = {setAwards}
-                    />
-                )
-            }
-        </Card.Body>
-    </Card>
+            </Card.Body>
+        </Card>
+    )
 }
 
 export default Awards;
