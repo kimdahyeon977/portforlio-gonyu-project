@@ -10,12 +10,12 @@ function DarkModeToggleButton() {
       style={{
         border : "0px",
         position: 'absolute',
-        top: 0,
         bottom: 0,
         left: 0,
         right: 0,
         display: 'flex',
         alignItems: 'flex-end',
+        justifyContent:'flex-end',
         padding: '24px',
       }}
     >
