@@ -27,16 +27,27 @@ function Header() {
   return (
     <Nav
       activeKey={location.pathname}
-      style={{ backgroundColor: isDarkMode ? 'black' : 'white' }}
+      style={{ backgroundColor: isDarkMode ? '#444' : '#CCC' }}
     >
       <Nav.Item className="me-auto mb-5">
-        <Nav.Link disabled>안녕하세요, 포트폴리오 공유 서비스입니다.</Nav.Link>
+        <Nav.Link
+          disabled
+          style={{ color: isDarkMode ? '#DDD' : '#333'}}
+        >안녕하세요, 포트폴리오 공유 서비스입니다.
+        </Nav.Link>
       </Nav.Item>
       <Nav.Item>
-        <Nav.Link onClick={() => navigate('/')}>나의 페이지</Nav.Link>
+        <Nav.Link 
+          onClick={() => navigate('/')}
+          style={{backgroundColor : isDarkMode ? '#CCC' : "#444"}}
+        >나의 페이지
+        </Nav.Link>
       </Nav.Item>
       <Nav.Item>
-        <Nav.Link onClick={() => navigate('/network')}>네트워크</Nav.Link>
+        <Nav.Link
+          onClick={() => navigate('/network')}
+          style={{backgroundColor : isDarkMode ? '#CCC' : "#444"}}
+        >네트워크</Nav.Link>
       </Nav.Item>
       {isLogin && (
         <Nav.Item>

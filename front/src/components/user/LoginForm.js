@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 import { GoogleLogin } from 'react-google-login';
 import * as Api from "../../api";
-import { DispatchContext } from "../../App";
+import { DispatchContext, DarkModeContext } from "../../App";
 
 function LoginForm() {
+  const { isDarkMode } = useContext(DarkModeContext);
+
   const responseGoogle = (response) => {
     console.log(response);
   }
@@ -63,12 +65,14 @@ function LoginForm() {
   };
 
   return (
-    <Container>
+    <Container style={{backgroundColor : isDarkMode ? '#222' : '#FFF'}}>
       <Row className="justify-content-md-center mt-5">
         <Col lg={8}>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="loginEmail">
-              <Form.Label>이메일 주소</Form.Label>
+              <Form.Label
+                style={{color : isDarkMode? "#FFF":"#000"}}
+              >이메일 주소</Form.Label>
               <Form.Control
                 type="email"
                 autoComplete="on"
@@ -83,7 +87,8 @@ function LoginForm() {
             </Form.Group>
 
             <Form.Group controlId="loginPassword" className="mt-3">
-              <Form.Label>비밀번호</Form.Label>
+              <Form.Label
+                style={{color : isDarkMode? "#FFF":"#000"}}>비밀번호</Form.Label>
               <Form.Control
                 type="password"
                 autoComplete="on"

@@ -1,0 +1,21 @@
+.darkmodeLogo{
+    width: 79px;
+    height: 79px;
+
+    display: block;
+
+    background-image : url(../public/darkmodeButton.png);
+    background-size: contain;
+    background-color : #000;
+}
+
+.lightmodeLogo{
+    width: 79px;
+    height: 79px;
+
+    display: block;
+    
+    background-image : url(../public/lightmodeButton.png);
+    background-size: contain;
+    background-color : #FFF;
+}

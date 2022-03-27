@@ -11,6 +11,7 @@ import Network from './components/user/Network';
 import RegisterForm from './components/user/RegisterForm';
 import Portfolio from './components/Portfolio';
 import DarkModeToggleButton from './components/DarkModeToggleButton';
+import "./App.css";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -65,17 +66,19 @@ function App() {
       <UserStateContext.Provider value={userState}>
         <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
           <Router>
-            <Header />
-            <Routes>
-              <Route path="/" exact element={<Portfolio />} />
-              <Route path="/google" exact element={<GoogleLogin />} />
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/register" element={<RegisterForm />} />
-              <Route path="/users/:userId" element={<Portfolio />} />
-              <Route path="/network" element={<Network />} />
-              <Route path="*" element={<Portfolio />} />
-            </Routes>
-            <DarkModeToggleButton />
+            <div className="mainWrapper" style={{ backgroundColor: isDarkMode ? '#444' : "#CCC" }}>            
+              <Header />
+              <Routes>
+                <Route path="/" exact element={<Portfolio />} />
+                <Route path="/google" exact element={<GoogleLogin />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegisterForm />} />
+                <Route path="/users/:userId" element={<Portfolio />} />
+                <Route path="/network" element={<Network />} />
+                <Route path="*" element={<Portfolio />} />
+              </Routes>
+              <DarkModeToggleButton />
+            </div>
           </Router>
         </DarkModeContext.Provider>
       </UserStateContext.Provider>
