@@ -44,11 +44,10 @@ yarn start
 back 폴더 내부 README 참고
 ```
 
----
 
 ## 20팀 추가기능
 
----
+```
 
 1. 프론트엔드
 
@@ -60,6 +59,7 @@ back 폴더 내부 README 참고
 
 - RBAC (Role Based Access Control)
  
+---
 
 본 프로젝트에서 제공하는 모든 코드 등의는 저작권법에 의해 보호받는 ㈜엘리스의 자산이며, 무단 사용 및 도용, 복제 및 배포를 금합니다.
 Copyright 2022 엘리스 Inc. All rights reserved.
